@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace UnityStandardAssets._2D
 {
+    [ExecuteInEditMode]
     public class Camera2DFollow : MonoBehaviour
     {
         public Transform target;
@@ -24,9 +25,8 @@ namespace UnityStandardAssets._2D
             transform.parent = null;
         }
 
-
         // Update is called once per frame
-        private void Update()
+        protected virtual void Update()
         {
             // only update lookahead pos if accelerating or changed direction
             float xMoveDelta = (target.position - m_LastTargetPosition).x;
