@@ -4,7 +4,9 @@ using System.Collections;
 public class LevelContainer : MonoBehaviour
 {
     const string LIMIT_ZONES_CONTAINER_NAME = "LimitZonesContainer";
+    const string WIND_ZONES_CONTAINER_NAME = "WindZonesContainer";
     const string LIMIT_ZONES_CHILD = "LimitZone";
+    const string WIND_ZONE_CHILD = "WindZone";
     Transform cacheTransform;
 
     public Vector2 Size;
@@ -69,7 +71,28 @@ public class LevelContainer : MonoBehaviour
         collider = limitZoneBottomRight.AddComponent<BoxCollider2D>();
         collider.size = Vector2.one + Vector2.up * Size.y;
         collider.offset = Vector2.up * (Size.y * 0.5f) + (Vector2.right * 0.5f);
-    }    
+    }
+
+    [ContextMenu("Create Wind Zone")]
+    void CreateWindZone()
+    {
+        Transform windZonesContainer = this.transform.FindChild(WIND_ZONES_CONTAINER_NAME);
+        if (windZonesContainer == null) // detach and destroy all children
+        {
+            GameObject windZonesGo = new GameObject(WIND_ZONES_CONTAINER_NAME);
+            windZonesGo.transform.SetParent(this.transform, false);
+            windZonesContainer = windZonesGo.transform;
+        }        
+
+        // Create zone
+        GameObject newWindZone = new GameObject(string.Format("{0}_{1}", WIND_ZONE_CHILD, windZonesContainer.childCount));
+        newWindZone.transform.SetParent(windZonesContainer, false);
+        newWindZone.AddComponent<WindZoneController>();        
+
+        #if UNITY_EDITOR
+        UnityEditor.Selection.activeGameObject = newWindZone;
+        #endif
+    }
 
     void OnDrawGizmos()
     {

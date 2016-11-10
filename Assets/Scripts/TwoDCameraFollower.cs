@@ -2,14 +2,15 @@
 using System.Collections;
 using UnityStandardAssets._2D;
 
+[RequireComponent(typeof(Camera))]
 public class TwoDCameraFollower : Camera2DFollow
 {
     [SerializeField] LevelContainer levelContainer;
-    Camera camera;
+    Camera mCamera;
 
-    void Awake()
+    void OnEnable()
     {
-        camera = this.GetComponent<Camera>();
+        mCamera = this.GetComponent<Camera>();
     }
 
     public Vector2 CameraSize
@@ -17,8 +18,8 @@ public class TwoDCameraFollower : Camera2DFollow
         get
         {
             Vector2 toReturn = Vector2.one;
-            toReturn.x = camera.orthographicSize * Screen.width / Screen.height;
-            toReturn.y = camera.orthographicSize;
+            toReturn.x = mCamera.orthographicSize * Screen.width / Screen.height;
+            toReturn.y = mCamera.orthographicSize;
             return toReturn;
         }
     }
@@ -26,30 +27,37 @@ public class TwoDCameraFollower : Camera2DFollow
     override protected void Update()
     {
         base.Update();
-
-        Vector3 cameraPosition = camera.transform.position;
-        Vector3 levelPosition = levelContainer.transform.position;
-
-        if (cameraPosition.x < (levelPosition.x + CameraSize.x))
-        {
-            cameraPosition.x = levelPosition.x + CameraSize.x;
-        }
-
-        if (cameraPosition.x > (levelPosition.x + levelContainer.Size.x - CameraSize.x))
-        {
-            cameraPosition.x = levelPosition.x + levelContainer.Size.x - CameraSize.x;
-        }
-
-        if (cameraPosition.y < levelPosition.y + CameraSize.y)
-        {
-            cameraPosition.y = levelPosition.y + CameraSize.y;
-        }
-
-        if (cameraPosition.y > levelPosition.y + levelContainer.Size.y - CameraSize.y)
-        {
-            cameraPosition.y = levelPosition.y + levelContainer.Size.y - CameraSize.y;
-        }
-
-        camera.transform.position = cameraPosition;
+        RestrictToLevelContainer();
     }
+
+    void RestrictToLevelContainer()
+    {
+        Vector3 cameraPosition = mCamera.transform.position;
+        Vector3 levelPosition = levelContainer.transform.position;
+        Vector3 cameraSize = CameraSize;
+
+        if (cameraPosition.x < (levelPosition.x + cameraSize.x))
+        {
+            cameraPosition.x = levelPosition.x + cameraSize.x;
+        }
+
+        if (cameraPosition.x > (levelPosition.x + levelContainer.Size.x - cameraSize.x))
+        {
+            cameraPosition.x = levelPosition.x + levelContainer.Size.x - cameraSize.x;
+        }
+
+        if (cameraPosition.y < levelPosition.y + cameraSize.y)
+        {
+            cameraPosition.y = levelPosition.y + cameraSize.y;
+        }
+
+        if (cameraPosition.y > levelPosition.y + levelContainer.Size.y - cameraSize.y)
+        {
+            cameraPosition.y = levelPosition.y + levelContainer.Size.y - cameraSize.y;
+        }
+
+        this.transform.position = cameraPosition;
+    }
+
+
 }
