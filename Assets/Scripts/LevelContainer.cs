@@ -11,6 +11,7 @@ public class LevelContainer : MonoBehaviour
     }
 
     const string LIMIT_ZONES_CONTAINER_NAME = "LimitZonesContainer";
+    const string SPAWN_POINTS_CONTAINER_NAME = "SpawnPoints";
     const string WIND_ZONES_CONTAINER_NAME = "WindZonesContainer";
     const string DAMAGE_ZONES_CONTAINER_NAME = "DamageZonesContainer";
     const string CONSUMABLE_ZONE_CONTAINER_NAME = "ConsumablesContainer";
@@ -19,19 +20,22 @@ public class LevelContainer : MonoBehaviour
     const string CONSUMABLE_TYPE_CONTAINER_NAME = "ConsumableType";
 
     const string LIMIT_ZONES_CHILD = "LimitZone";
+    const string SPAWN_POINT_CHILD = "SpawnPoint";
     const string WIND_ZONE_CHILD = "WindZone";
     const string DAMAGE_ZONE_CHILD = "DamageZone";
     const string CONSUMABLE_ZONE_CHILD = "Consumable";
-    const string QUESTION_CHILD = "Question";
+    const string QUESTION_CHILD = "Question";    
 
     Transform cacheTransform;
 
     public Vector2 Size;
     [Header("Level elements config")]
+    public SpawnPoint[] spawnPoints;
     public ConsumableConfig[] consumablesConfig;
     public GameObject damageZonePrefab;
     public GameObject windZonePrefab;
     public GameObject questionPrefab;
+    public GameObject spawnPointPrefab;    
 
     public Vector2 CenterPosition
     {
@@ -42,7 +46,14 @@ public class LevelContainer : MonoBehaviour
             toReturn += Vector2.up * (Size.y * 0.5f);
             return toReturn;
         }
-    }    
+    }
+
+    void Awake()
+    {
+        // find all spawn points
+        Transform spawnPointsContainer = this.CreateContainer(SPAWN_POINTS_CONTAINER_NAME);
+        spawnPoints = spawnPointsContainer.GetComponentsInChildren<SpawnPoint>();
+    }
 
     [ContextMenu("Create Limit Zones")]
     void CreateLimitZones()
@@ -95,6 +106,20 @@ public class LevelContainer : MonoBehaviour
         collider.offset = Vector2.up * (Size.y * 0.5f) + (Vector2.right * 0.5f);
     }
 
+    [ContextMenu("Create Spawn Point")]
+    void CreateSpawnPoint()
+    {
+        Transform parent = CreateContainer(SPAWN_POINTS_CONTAINER_NAME);
+        string childName = string.Format("{0}_{1}", SPAWN_POINT_CHILD, parent.childCount);
+        GameObject newSpawnPoint = Object.Instantiate<GameObject>(spawnPointPrefab);
+        newSpawnPoint.name = childName;
+        newSpawnPoint.transform.SetParent(parent, false);
+
+        #if UNITY_EDITOR
+        UnityEditor.Selection.activeGameObject = newSpawnPoint;
+        #endif
+    }
+
     [ContextMenu("Create Wind Zone")]
     void CreateWindZone()
     {
@@ -102,6 +127,7 @@ public class LevelContainer : MonoBehaviour
         string childName = string.Format("{0}_{1}", WIND_ZONE_CHILD, parent.childCount);
         GameObject windZoneGo = Object.Instantiate<GameObject>(windZonePrefab);
         windZoneGo.name = childName;
+        windZoneGo.transform.SetParent(parent, false);
 
         #if UNITY_EDITOR
         UnityEditor.Selection.activeGameObject = windZoneGo;
@@ -114,7 +140,8 @@ public class LevelContainer : MonoBehaviour
         Transform parent = CreateContainer(DAMAGE_ZONES_CONTAINER_NAME);
         string childName = string.Format("{0}_{1}", DAMAGE_ZONE_CHILD, parent.childCount);
         GameObject damageZoneGo = Object.Instantiate<GameObject>(damageZonePrefab);
-        damageZoneGo.name = childName;                
+        damageZoneGo.name = childName;
+        damageZoneGo.transform.SetParent(parent, false);
 
         #if UNITY_EDITOR
         UnityEditor.Selection.activeGameObject = damageZoneGo;
@@ -148,6 +175,7 @@ public class LevelContainer : MonoBehaviour
         string childName = string.Format("{0}_{1}", QUESTION_CHILD, parent.childCount);
         GameObject questionGo = Object.Instantiate<GameObject>(questionPrefab);
         questionGo.name = childName;
+        questionGo.transform.SetParent(parent, false);
 
         #if UNITY_EDITOR
         UnityEditor.Selection.activeGameObject = questionGo;
