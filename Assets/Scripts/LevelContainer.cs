@@ -3,13 +3,30 @@ using System.Collections;
 
 public class LevelContainer : MonoBehaviour
 {
+    [System.Serializable]
+    public struct ConsumableConfig
+    {
+        public ConsumableController.ConsumableType type;
+        public GameObject prefab;
+    }
+
     const string LIMIT_ZONES_CONTAINER_NAME = "LimitZonesContainer";
     const string WIND_ZONES_CONTAINER_NAME = "WindZonesContainer";
+    const string DAMAGE_ZONES_CONTAINER_NAME = "DamageZonesContainer";    
+    const string CONSUMABLE_ZONE_CONTAINER_NAME = "ConsumablesContainer";
+    const string CONSUMABLE_TYPE_CONTAINER_NAME = "ConsumableType";
     const string LIMIT_ZONES_CHILD = "LimitZone";
     const string WIND_ZONE_CHILD = "WindZone";
+    const string DAMAGE_ZONE_CHILD = "DamageZone";
+    const string CONSUMABLE_ZONE_CHILD = "Consumable";
+
     Transform cacheTransform;
 
     public Vector2 Size;
+    [Header("Level elements config")]
+    public ConsumableConfig[] consumablesConfig;
+    public GameObject damageZonePrefab;
+    public GameObject windZonePrefab;
 
     public Vector2 CenterPosition
     {
@@ -76,22 +93,95 @@ public class LevelContainer : MonoBehaviour
     [ContextMenu("Create Wind Zone")]
     void CreateWindZone()
     {
-        Transform windZonesContainer = this.transform.FindChild(WIND_ZONES_CONTAINER_NAME);
-        if (windZonesContainer == null) // detach and destroy all children
-        {
-            GameObject windZonesGo = new GameObject(WIND_ZONES_CONTAINER_NAME);
-            windZonesGo.transform.SetParent(this.transform, false);
-            windZonesContainer = windZonesGo.transform;
-        }        
-
-        // Create zone
-        GameObject newWindZone = new GameObject(string.Format("{0}_{1}", WIND_ZONE_CHILD, windZonesContainer.childCount));
-        newWindZone.transform.SetParent(windZonesContainer, false);
-        newWindZone.AddComponent<WindZoneController>();        
+        Transform parent = CreateContainer(WIND_ZONES_CONTAINER_NAME);
+        string childName = string.Format("{0}_{1}", WIND_ZONE_CHILD, parent.childCount);
+        GameObject windZoneGo = Object.Instantiate<GameObject>(windZonePrefab);
+        windZoneGo.name = childName;
 
         #if UNITY_EDITOR
-        UnityEditor.Selection.activeGameObject = newWindZone;
+        UnityEditor.Selection.activeGameObject = windZoneGo;
         #endif
+    }
+
+    [ContextMenu("Create Damage Zone")]
+    void CreateDamageZone()
+    {
+        Transform parent = CreateContainer(DAMAGE_ZONES_CONTAINER_NAME);
+        string childName = string.Format("{0}_{1}", DAMAGE_ZONE_CHILD, parent.childCount);
+        GameObject damageZoneGo = Object.Instantiate<GameObject>(damageZonePrefab);
+        damageZoneGo.name = childName;                
+
+        #if UNITY_EDITOR
+        UnityEditor.Selection.activeGameObject = damageZoneGo;
+        #endif
+    }
+
+    [ContextMenu("Create Coin Consumable")]
+    void CreateCoinConsumable()
+    {
+        GameObject newConsumable = CreateConsumableObject(ConsumableController.ConsumableType.Coin);
+        
+        #if UNITY_EDITOR
+        UnityEditor.Selection.activeGameObject = newConsumable;
+        #endif
+    }
+
+    [ContextMenu("Create Sample Consumable")]
+    void CreateSampleConsumable()
+    {
+        GameObject newConsumable = CreateConsumableObject(ConsumableController.ConsumableType.Sample);
+
+        #if UNITY_EDITOR
+        UnityEditor.Selection.activeGameObject = newConsumable;
+        #endif        
+    }    
+
+    GameObject CreateConsumableObject(ConsumableController.ConsumableType type)
+    {
+        string containerName = string.Format("{0}/{1}_{2}", CONSUMABLE_ZONE_CONTAINER_NAME, CONSUMABLE_TYPE_CONTAINER_NAME, type.ToString());
+
+        Transform parent = CreateContainer(containerName);
+        string childName = string.Format("{0}_{1}", CONSUMABLE_ZONE_CHILD, parent.childCount);
+        GameObject childGo = null;
+
+        foreach (var prefab in consumablesConfig)
+        {
+            if (prefab.type == type)
+            {
+                childGo = Object.Instantiate<GameObject>(prefab.prefab);
+                break;
+            }
+        }
+        if (childGo == null)
+        {
+            childGo = new GameObject();
+            ConsumableController consumableController = childGo.AddComponent<ConsumableController>();
+            consumableController.type = type;
+        }
+
+        childGo.name = childName;
+        childGo.transform.SetParent(parent, false);
+        return childGo;
+    }    
+
+    Transform CreateContainer(string containerName)
+    {
+        Transform parent = this.transform;
+        Transform childContainer = null;
+        string[] paths = containerName.Split('/');
+        foreach (var path in paths)
+        {
+            childContainer = parent.FindChild(path);
+            if (childContainer == null) // Create Child
+            {
+                GameObject newParent = new GameObject(path);
+                newParent.transform.SetParent(parent, false);
+                childContainer = newParent.transform;
+            }
+            parent = childContainer;
+        }
+
+        return parent;
     }
 
     void OnDrawGizmos()

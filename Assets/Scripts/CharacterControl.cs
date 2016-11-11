@@ -1,24 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
 using DG.Tweening;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterControl : MonoBehaviour {
 
 	Rigidbody2D rigidBody;
     Color initialColor;
-    public bool IsInvincible { get; private set; }
+    Dictionary<ConsumableController.ConsumableType,int> consumables;
+    float initialInvinsibleTime;
 
+    [Header("Character and Movement")]
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] float moveForce;
-    [SerializeField] [Range(0,100)] float energy = 100;
-
+        
+    [Header("Health")]
+    [SerializeField] [Range(0,100)] float energy = 100;    
     [SerializeField] float invincibleTime;
+
+    public bool IsInvincible { get; private set; }
+    public System.Action<ConsumableController.ConsumableType, int> onConsumableAmountUpdated = delegate { };
 
     void Awake()
     {
         rigidBody = this.GetComponent<Rigidbody2D>();
         initialColor = sprite.color;
+        consumables = new Dictionary<ConsumableController.ConsumableType, int>();
     }
 	
 	// Update is called once per frame
@@ -48,9 +56,20 @@ public class CharacterControl : MonoBehaviour {
             initialInvinsibleTime = invincibleTime;
             StartCoroutine(InvinsibleTimeCoroutine(sprite));
         }
-    }    
+    }
 
-    float initialInvinsibleTime;
+    public void UpdateConsumable(ConsumableController.ConsumableType type, int amount)
+    {
+        if (consumables.ContainsKey(type))
+        {
+            consumables[type] += amount;
+        }
+        else {
+            consumables[type] = amount;
+        }
+
+        onConsumableAmountUpdated(type, consumables[type]);
+    }
 
     IEnumerator InvinsibleTimeCoroutine( SpriteRenderer spriteRenderer )
     {
