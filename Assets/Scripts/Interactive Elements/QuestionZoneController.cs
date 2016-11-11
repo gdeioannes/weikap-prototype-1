@@ -13,5 +13,6 @@ public class QuestionZoneController : BaseInteractiveElement {
     void DisplayQuestion()
     {
         // TODO: NEED TO BE DEFINED
+        Object.Destroy(this.gameObject);
     }
 }

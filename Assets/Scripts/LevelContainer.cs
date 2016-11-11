@@ -12,13 +12,17 @@ public class LevelContainer : MonoBehaviour
 
     const string LIMIT_ZONES_CONTAINER_NAME = "LimitZonesContainer";
     const string WIND_ZONES_CONTAINER_NAME = "WindZonesContainer";
-    const string DAMAGE_ZONES_CONTAINER_NAME = "DamageZonesContainer";    
+    const string DAMAGE_ZONES_CONTAINER_NAME = "DamageZonesContainer";
     const string CONSUMABLE_ZONE_CONTAINER_NAME = "ConsumablesContainer";
+    const string QUESTIONS_CONTAINER_NAME = "QuestionsContainer";
+
     const string CONSUMABLE_TYPE_CONTAINER_NAME = "ConsumableType";
+
     const string LIMIT_ZONES_CHILD = "LimitZone";
     const string WIND_ZONE_CHILD = "WindZone";
     const string DAMAGE_ZONE_CHILD = "DamageZone";
     const string CONSUMABLE_ZONE_CHILD = "Consumable";
+    const string QUESTION_CHILD = "Question";
 
     Transform cacheTransform;
 
@@ -27,6 +31,7 @@ public class LevelContainer : MonoBehaviour
     public ConsumableConfig[] consumablesConfig;
     public GameObject damageZonePrefab;
     public GameObject windZonePrefab;
+    public GameObject questionPrefab;
 
     public Vector2 CenterPosition
     {
@@ -134,7 +139,20 @@ public class LevelContainer : MonoBehaviour
         #if UNITY_EDITOR
         UnityEditor.Selection.activeGameObject = newConsumable;
         #endif        
-    }    
+    }
+
+    [ContextMenu("Create Question Object")]
+    void CreateQuestionObject()
+    {
+        Transform parent = CreateContainer(QUESTIONS_CONTAINER_NAME);
+        string childName = string.Format("{0}_{1}", QUESTION_CHILD, parent.childCount);
+        GameObject questionGo = Object.Instantiate<GameObject>(questionPrefab);
+        questionGo.name = childName;
+
+        #if UNITY_EDITOR
+        UnityEditor.Selection.activeGameObject = questionGo;
+        #endif
+    }
 
     GameObject CreateConsumableObject(ConsumableController.ConsumableType type)
     {
