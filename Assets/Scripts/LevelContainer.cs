@@ -13,6 +13,7 @@ public class LevelContainer : MonoBehaviour
     const string LIMIT_ZONES_CONTAINER_NAME = "LimitZonesContainer";
     const string SPAWN_POINTS_CONTAINER_NAME = "SpawnPoints";
     const string WIND_ZONES_CONTAINER_NAME = "WindZonesContainer";
+    const string SURFACE_ZONES_CONTAINER_NAME = "SurfaceZonesContainer";
     const string DAMAGE_ZONES_CONTAINER_NAME = "DamageZonesContainer";
     const string CONSUMABLE_ZONE_CONTAINER_NAME = "ConsumablesContainer";
     const string QUESTIONS_CONTAINER_NAME = "QuestionsContainer";
@@ -22,6 +23,7 @@ public class LevelContainer : MonoBehaviour
     const string LIMIT_ZONES_CHILD = "LimitZone";
     const string SPAWN_POINT_CHILD = "SpawnPoint";
     const string WIND_ZONE_CHILD = "WindZone";
+    const string SURFACE_ZONE_CHILD = "SurfaceZone";
     const string DAMAGE_ZONE_CHILD = "DamageZone";
     const string CONSUMABLE_ZONE_CHILD = "Consumable";
     const string QUESTION_CHILD = "Question";    
@@ -35,7 +37,7 @@ public class LevelContainer : MonoBehaviour
     public GameObject damageZonePrefab;
     public GameObject windZonePrefab;
     public GameObject questionPrefab;
-    public GameObject spawnPointPrefab;    
+    public GameObject spawnPointPrefab;
 
     public Vector2 CenterPosition
     {
@@ -48,11 +50,21 @@ public class LevelContainer : MonoBehaviour
         }
     }
 
+    public int CoinsCount { get; private set; }
+    public int SamplesCount { get; private set; }
+    public int QuestionsCount { get; private set; }
+
     void Awake()
     {
         // find all spawn points
-        Transform spawnPointsContainer = this.CreateContainer(SPAWN_POINTS_CONTAINER_NAME);
-        spawnPoints = spawnPointsContainer.GetComponentsInChildren<SpawnPoint>();
+        Transform parentContainer = this.CreateContainer(SPAWN_POINTS_CONTAINER_NAME);
+        spawnPoints = parentContainer.GetComponentsInChildren<SpawnPoint>();
+        parentContainer = this.CreateContainer(string.Format("{0}/{1}_{2}",CONSUMABLE_ZONE_CONTAINER_NAME, CONSUMABLE_TYPE_CONTAINER_NAME, ConsumableController.ConsumableType.Coin));
+        CoinsCount = parentContainer.childCount;
+        parentContainer = this.CreateContainer(string.Format("{0}/{1}_{2}", CONSUMABLE_ZONE_CONTAINER_NAME, CONSUMABLE_TYPE_CONTAINER_NAME, ConsumableController.ConsumableType.Sample));
+        SamplesCount = parentContainer.childCount;
+        parentContainer = this.CreateContainer(QUESTIONS_CONTAINER_NAME);
+        QuestionsCount = parentContainer.childCount;
     }
 
     [ContextMenu("Create Limit Zones")]
@@ -145,6 +157,22 @@ public class LevelContainer : MonoBehaviour
 
         #if UNITY_EDITOR
         UnityEditor.Selection.activeGameObject = damageZoneGo;
+        #endif
+    }
+
+    [ContextMenu("Create Surface Zone")]
+    void CreateSurfaceZone()
+    {
+        Transform parent = CreateContainer(SURFACE_ZONES_CONTAINER_NAME);
+        string childName = string.Format("{0}_{1}", SURFACE_ZONE_CHILD, parent.childCount);
+        GameObject surfaceZoneGo = new GameObject(childName);
+        surfaceZoneGo.transform.SetParent(parent, false);
+        BoxCollider2D collider = surfaceZoneGo.AddComponent<BoxCollider2D>();
+        collider.isTrigger = true;
+        surfaceZoneGo.AddComponent<SurfaceZone>();
+
+        #if UNITY_EDITOR
+        UnityEditor.Selection.activeGameObject = surfaceZoneGo;
         #endif
     }
 

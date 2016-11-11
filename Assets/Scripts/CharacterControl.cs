@@ -10,17 +10,21 @@ public class CharacterControl : MonoBehaviour {
     Color initialColor;
     Dictionary<ConsumableController.ConsumableType,int> consumables;
     float initialInvinsibleTime;
+    int answeredQuestions = 0;
 
     [Header("Character and Movement")]
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] float moveForce;
         
     [Header("Health")]
-    [SerializeField] [Range(0,100)] float energy = 100;    
+    [SerializeField] [Range(0,100)] float energy = 100;
     [SerializeField] float invincibleTime;
 
     public bool IsInvincible { get; private set; }
-    public System.Action<ConsumableController.ConsumableType, int> onConsumableAmountUpdated = delegate { };
+    public bool IsOnSurface { get; set; }
+    public System.Action<ConsumableController.ConsumableType, int> OnConsumableAmountUpdated = delegate { };
+    public System.Action<float> OnEnergyUpdated = delegate { };
+    public System.Action<int> OnQuestionAnswered = delegate { };
 
     void Awake()
     {
@@ -51,6 +55,8 @@ public class CharacterControl : MonoBehaviour {
 
         energy = Mathf.Clamp(energy + deltaEnergy, 0, 100);
 
+        OnEnergyUpdated(energy);
+
         if (deltaEnergy < 0)
         {
             initialInvinsibleTime = invincibleTime;
@@ -68,7 +74,13 @@ public class CharacterControl : MonoBehaviour {
             consumables[type] = amount;
         }
 
-        onConsumableAmountUpdated(type, consumables[type]);
+        OnConsumableAmountUpdated(type, consumables[type]);
+    }
+
+    public void UpdateQuestion(int amount)
+    {
+        answeredQuestions += amount;
+        OnQuestionAnswered(answeredQuestions);
     }
 
     IEnumerator InvinsibleTimeCoroutine( SpriteRenderer spriteRenderer )
@@ -88,5 +100,18 @@ public class CharacterControl : MonoBehaviour {
         spriteRenderer.DOColor(initialColor, 0.5f);
 
         yield break;
+    }
+
+    public IEnumerator EnergyCountDownCoroutine(float timelapse)
+    {
+        while (energy > 0)
+        {
+            yield return null;
+            if (!IsOnSurface)
+            {
+                energy -= (1f/timelapse) * Time.deltaTime;
+                OnEnergyUpdated(energy);
+            }
+        }
     }
 }
