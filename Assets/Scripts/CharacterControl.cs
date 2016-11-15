@@ -6,16 +6,24 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterControl : MonoBehaviour {
 
-	Rigidbody2D rigidBody;
+    [System.Serializable]
+    public struct MovementForce
+    {
+        public float horizontal;
+        public float vertical;
+    }
+
+    Rigidbody2D rigidBody;    
     Color initialColor;
     Dictionary<ConsumableController.ConsumableType,int> consumables;
     float initialInvinsibleTime;
-    int answeredQuestions = 0;
+    int answeredQuestions = 0;    
 
     [Header("Character and Movement")]
     [SerializeField] SpriteRenderer sprite;
-    [SerializeField] float moveForce;
-        
+    [SerializeField] MovementForce waterMovement;
+    [SerializeField] MovementForce surfaceMovement;
+
     [Header("Health")]
     [SerializeField] [Range(0,100)] float energy = 100;
     [SerializeField] float invincibleTime;
@@ -32,22 +40,33 @@ public class CharacterControl : MonoBehaviour {
         initialColor = sprite.color;
         consumables = new Dictionary<ConsumableController.ConsumableType, int>();
     }
-	
-	// Update is called once per frame
-	void Update () {
 
-		if(Input.GetKey(KeyCode.RightArrow)){
-            rigidBody.AddForce( Vector2.right * moveForce );
-		}
+    // Update is called once per frame
+    void FixedUpdate () {
 
-		if(Input.GetKey(KeyCode.LeftArrow)){
-            rigidBody.AddForce( Vector2.left * moveForce );
-		}
+        Vector2 lastMoveVector = Vector2.zero;
+        
+        lastMoveVector.x = Mathf.Clamp(UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxis("Horizontal"),-1,1);
 
-		if(Input.GetKey(KeyCode.UpArrow)){
-            rigidBody.AddForce( Vector2.up * moveForce );
-		}
-	}
+        if (rigidBody.velocity.y <= 0)
+        {
+            lastMoveVector.y = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxis("Vertical") > 0 ? 1 : 0;            
+        }        
+
+        if (lastMoveVector == Vector2.zero)
+        {
+            return;
+        }
+
+        if (IsOnSurface)
+        {
+            rigidBody.AddForce(new Vector2(lastMoveVector.x * surfaceMovement.horizontal, lastMoveVector.y * surfaceMovement.vertical));
+        }
+        else
+        {
+            rigidBody.AddForce(new Vector2(lastMoveVector.x * waterMovement.horizontal, lastMoveVector.y * waterMovement.vertical));
+        }
+    }
 
     public void UpdateEnergy(float deltaEnergy)
     {

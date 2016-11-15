@@ -10,7 +10,7 @@ public class WindZoneController : MonoBehaviour
     AreaEffector2D areaEffector2D;
 
     [SerializeField] [Range(0,359)] float forceAngle;
-    [SerializeField] [Range(0,15)] float forceMagnitude;
+    [SerializeField] [Range(0,100)] float forceMagnitude;
     [SerializeField] Vector2 size;
 
     void OnEnable()
