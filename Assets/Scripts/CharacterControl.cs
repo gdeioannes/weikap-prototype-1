@@ -13,14 +13,13 @@ public class CharacterControl : MonoBehaviour {
         public float vertical;
     }
 
-    Rigidbody2D rigidBody;    
-    Color initialColor;
+    Rigidbody2D rigidBody;
     Dictionary<ConsumableController.ConsumableType,int> consumables;
     float initialInvinsibleTime;
     int answeredQuestions = 0;    
 
     [Header("Character and Movement")]
-    [SerializeField] SpriteRenderer sprite;
+    [SerializeField] Animator animator;
     [SerializeField] MovementForce waterMovement;
     [SerializeField] MovementForce surfaceMovement;
 
@@ -37,21 +36,36 @@ public class CharacterControl : MonoBehaviour {
     void Awake()
     {
         rigidBody = this.GetComponent<Rigidbody2D>();
-        initialColor = sprite.color;
         consumables = new Dictionary<ConsumableController.ConsumableType, int>();
     }
 
+    float lastHDirection = 0;
+
     // Update is called once per frame
     void FixedUpdate () {
-
-        Vector2 lastMoveVector = Vector2.zero;
         
-        lastMoveVector.x = Mathf.Clamp(UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxis("Horizontal"),-1,1);
+        Vector2 lastMoveVector = Vector2.zero;
+
+        lastMoveVector.x = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxis("Horizontal");
+        lastMoveVector.x = lastMoveVector.x > 0 ? 1 : lastMoveVector.x < 0 ? -1 : 0;
+
+        if (lastMoveVector.x != 0)
+        {
+            lastHDirection = lastMoveVector.x;
+        }
 
         if (rigidBody.velocity.y <= 0)
         {
-            lastMoveVector.y = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxis("Vertical") > 0 ? 1 : 0;            
-        }        
+            lastMoveVector.y = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxis("Vertical") > 0 ? 1 : 0;
+            if (lastMoveVector.y > 0)
+            {
+                animator.SetTrigger("Jump");
+            }
+        }
+
+        animator.SetFloat("Speed", Mathf.Abs(lastMoveVector.x));
+        animator.SetFloat("hSpeed", lastHDirection);
+        animator.SetFloat("vSpeed", rigidBody.velocity.y);
 
         if (lastMoveVector == Vector2.zero)
         {
@@ -65,7 +79,7 @@ public class CharacterControl : MonoBehaviour {
         else
         {
             rigidBody.AddForce(new Vector2(lastMoveVector.x * waterMovement.horizontal, lastMoveVector.y * waterMovement.vertical));
-        }
+        }        
     }
 
     public void UpdateEnergy(float deltaEnergy)
@@ -79,7 +93,7 @@ public class CharacterControl : MonoBehaviour {
         if (deltaEnergy < 0)
         {
             initialInvinsibleTime = invincibleTime;
-            StartCoroutine(InvinsibleTimeCoroutine(sprite));
+            StartCoroutine(InvinsibleTimeCoroutine());
         }
     }
 
@@ -102,12 +116,11 @@ public class CharacterControl : MonoBehaviour {
         OnQuestionAnswered(answeredQuestions);
     }
 
-    IEnumerator InvinsibleTimeCoroutine( SpriteRenderer spriteRenderer )
+    IEnumerator InvinsibleTimeCoroutine()
     {
-        IsInvincible = true;        
-        var tweener =  spriteRenderer.DOFade(0, 0.5f);        
-        tweener.SetLoops(-1, LoopType.Yoyo);
-
+        IsInvincible = true;
+        animator.SetBool("Invinsible", true);
+        
         while (initialInvinsibleTime > 0)
         {
             initialInvinsibleTime -= Time.deltaTime;
@@ -115,8 +128,7 @@ public class CharacterControl : MonoBehaviour {
         }
 
         IsInvincible = false;
-        tweener.Kill(true);
-        spriteRenderer.DOColor(initialColor, 0.5f);
+        animator.SetBool("Invinsible", false);        
 
         yield break;
     }
@@ -132,5 +144,8 @@ public class CharacterControl : MonoBehaviour {
                 OnEnergyUpdated(energy);
             }
         }
+
+        // Restart current level
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 }
