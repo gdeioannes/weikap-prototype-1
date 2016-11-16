@@ -43,7 +43,12 @@ public class CharacterControl : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        
+
+        if (IsOnSurface)
+        {
+            return;
+        }
+
         Vector2 lastMoveVector = Vector2.zero;
 
         lastMoveVector.x = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxisRaw("Horizontal");        
