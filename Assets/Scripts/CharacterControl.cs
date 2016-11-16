@@ -16,7 +16,9 @@ public class CharacterControl : MonoBehaviour {
     Rigidbody2D rigidBody;
     Dictionary<ConsumableController.ConsumableType,int> consumables;
     float initialInvinsibleTime;
-    int answeredQuestions = 0;    
+    int answeredQuestions = 0;
+    float lastHDirection = 1;
+    bool upButtonLocked;
 
     [Header("Character and Movement")]
     [SerializeField] Animator animator;
@@ -39,28 +41,33 @@ public class CharacterControl : MonoBehaviour {
         consumables = new Dictionary<ConsumableController.ConsumableType, int>();
     }
 
-    float lastHDirection = 0;
-
     // Update is called once per frame
-    void FixedUpdate () {
+    void Update () {
         
         Vector2 lastMoveVector = Vector2.zero;
 
-        lastMoveVector.x = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxis("Horizontal");
-        lastMoveVector.x = lastMoveVector.x > 0 ? 1 : lastMoveVector.x < 0 ? -1 : 0;
+        lastMoveVector.x = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxisRaw("Horizontal");        
+        lastMoveVector.y = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxisRaw("Vertical") > 0 ? 1 : 0;
 
         if (lastMoveVector.x != 0)
         {
             lastHDirection = lastMoveVector.x;
         }
 
-        if (rigidBody.velocity.y <= 0)
+        if (lastMoveVector.y != 1 && rigidBody.velocity.y < 0)
         {
-            lastMoveVector.y = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxis("Vertical") > 0 ? 1 : 0;
-            if (lastMoveVector.y > 0)
-            {
-                animator.SetTrigger("Jump");
-            }
+            upButtonLocked = false;
+        }
+
+        if ((lastMoveVector.y > 0 && upButtonLocked) || rigidBody.velocity.y > 0)
+        {
+            lastMoveVector.y = 0;
+        }        
+
+        if (rigidBody.velocity.y <= 0 && lastMoveVector.y > 0 && !upButtonLocked)
+        {
+            animator.SetTrigger("Jump");
+            upButtonLocked = true;
         }
 
         animator.SetFloat("Speed", Mathf.Abs(lastMoveVector.x));
