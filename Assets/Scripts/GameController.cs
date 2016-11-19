@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour {
     [SerializeField] UnityEngine.UI.Text samplesMax;
     [SerializeField] UnityEngine.UI.Text questionsCurrent;
     [SerializeField] UnityEngine.UI.Text questionsMax;
+    [SerializeField] QuestionsPopUpController questionController;
 
     public Transform CoinsIconContainer;    
     public Transform SamplesIconContainer;
@@ -73,6 +74,11 @@ public class GameController : MonoBehaviour {
     void OnEnergyUpdated(float amount)
     {
         energySlider.value = amount;        
+    }
+
+    public void DisplayQuestion(int questionId, System.Action<bool> onAnswerCb)
+    {
+        questionController.ShowQuestion(questionId, onAnswerCb);
     }
 
     void OnQuestionAnswered(int amount)

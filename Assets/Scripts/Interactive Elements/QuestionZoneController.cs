@@ -5,15 +5,24 @@ using DG.Tweening;
 public class QuestionZoneController : BaseInteractiveElement {
 
     [SerializeField] int questionId;
+    CharacterControl character;
 
     protected override void OnCharacterEnter(CharacterControl character)
     {
-        DisplayQuestion(character);
-    }
+        this.character = character;
+        GameController.Instance.DisplayQuestion(questionId, OnQuestionAnswered);
+    }    
 
-    void DisplayQuestion(CharacterControl character)
+    void OnQuestionAnswered(bool result)
     {
-        StartCoroutine(MoveQuestionToUI(character));
+        if (result)
+        {
+            StartCoroutine(MoveQuestionToUI(character));
+        }
+        else
+        {
+            Object.Destroy(this.gameObject); // just remove question
+        }
     }
 
     IEnumerator MoveQuestionToUI(CharacterControl character)
@@ -32,6 +41,8 @@ public class QuestionZoneController : BaseInteractiveElement {
         tweener.SetEase(GameController.Instance.consumableMovEaseType);
         yield return tweener.WaitForCompletion();
         yield return null;
+
+        character.UpdateQuestion(1);
 
         Object.Destroy(this.gameObject);
 
