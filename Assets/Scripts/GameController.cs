@@ -17,8 +17,20 @@ public class GameController : MonoBehaviour {
     [SerializeField] UnityEngine.UI.Text questionsCurrent;
     [SerializeField] UnityEngine.UI.Text questionsMax;
 
+    public Transform CoinsIconContainer;    
+    public Transform SamplesIconContainer;
+    public Transform QuestionsIconContainer;
+    public Camera WorldCamera;
+    public RectTransform UIMainRectTransform;
+
+    public float consumablesMoveToUITime = 2f;
+    public DG.Tweening.Ease consumableMovEaseType = DG.Tweening.Ease.InCubic;
+
+    public static GameController Instance { get; private set; }
+
     void Awake()
     {
+        Instance = this;
         cameraFollower.enabled = false;
         energySlider.value = 100;
     }
@@ -66,5 +78,10 @@ public class GameController : MonoBehaviour {
     void OnQuestionAnswered(int amount)
     {
         questionsCurrent.text = amount.ToString();
+    }
+
+    void OnDestroy()
+    {
+        Instance = null;
     }
 }
