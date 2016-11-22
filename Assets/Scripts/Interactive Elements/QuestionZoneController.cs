@@ -6,22 +6,47 @@ public class QuestionZoneController : BaseInteractiveElement {
 
     [SerializeField] int questionId;
     CharacterControl character;
+    bool questionDisplayed = false;
 
     protected override void OnCharacterEnter(CharacterControl character)
     {
         this.character = character;
+
+        if (character.IsInvincible)
+        {   // restriction added. unable to interact with questions if invincible
+            return;
+        }
+
         GameController.Instance.DisplayQuestion(questionId, OnQuestionAnswered);
-    }    
+        questionDisplayed = true;
+    }
+
+    protected override void OnCharacterStay(CharacterControl character)
+    {
+        if (questionDisplayed || character.IsInvincible )
+        {
+            return;
+        }
+        OnCharacterEnter(character);
+    }
+
+    protected override void OnCharacterExit(CharacterControl character)
+    {
+        this.character = null;
+        questionDisplayed = false;
+    }
 
     void OnQuestionAnswered(bool result)
     {
         if (result)
         {
+            character.UpdateEnergy(GameController.Instance.questionsDB.EnergyAfterRightAnswer);
             StartCoroutine(MoveQuestionToUI(character));
         }
         else
         {
-            Object.Destroy(this.gameObject); // just remove question
+            character.UpdateEnergy(GameController.Instance.questionsDB.EnergyAfterWrongAnswer);
+            questionDisplayed = false;
         }
     }
 

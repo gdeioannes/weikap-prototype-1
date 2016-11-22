@@ -3,6 +3,9 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 
+    [Header("Config")]
+
+    public QuestionsDBScriptableObject questionsDB;
     [SerializeField] TwoDCameraFollower cameraFollower;
     [SerializeField] LevelContainer levelContainer;
     [SerializeField] CharacterControl characterPrefab;
@@ -74,6 +77,11 @@ public class GameController : MonoBehaviour {
     void OnEnergyUpdated(float amount)
     {
         energySlider.value = amount;        
+    }
+
+    public QuestionsDBScriptableObject.Question GetQuestionInfoById(int questionId)
+    {
+        return questionsDB.GetQuestionInfoById(questionId);
     }
 
     public void DisplayQuestion(int questionId, System.Action<bool> onAnswerCb)
