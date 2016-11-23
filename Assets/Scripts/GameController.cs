@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour {
     [Header("Config")]
 
     public QuestionsDBScriptableObject questionsDB;
+    public LevelProgress levelProgress;
     [SerializeField] TwoDCameraFollower cameraFollower;
     [SerializeField] LevelContainer levelContainer;
     [SerializeField] CharacterControl characterPrefab;
@@ -37,6 +38,7 @@ public class GameController : MonoBehaviour {
         Instance = this;
         cameraFollower.enabled = false;
         energySlider.value = 100;
+        GameProgress.Instantiate();
     }
 
     void Start()
@@ -49,10 +51,8 @@ public class GameController : MonoBehaviour {
 
     void SpawnCharacterOnMap()
     {
-        CharacterControl character = Object.Instantiate<CharacterControl>(characterPrefab);
-        character.OnConsumableAmountUpdated += OnConsumableAmountUpdated;
-        character.OnEnergyUpdated += OnEnergyUpdated;
-        character.OnQuestionAnswered += OnQuestionAnswered;
+        CharacterControl character = Object.Instantiate<CharacterControl>(characterPrefab);        
+        character.OnEnergyUpdated += OnEnergyUpdated;        
         character.StartCoroutine(character.EnergyCountDownCoroutine(energyDecreaseInterval));
         Transform spawnPoint = levelContainer.spawnPoints[Random.Range(0, levelContainer.spawnPoints.Length-1)].transform;
         character.gameObject.transform.SetParent(levelContainer.transform, false);
@@ -61,7 +61,26 @@ public class GameController : MonoBehaviour {
         cameraFollower.enabled = true;
     }
 
-    void OnConsumableAmountUpdated(ConsumableController.ConsumableType type, int amount)
+    public void UpdateConsumable(ConsumableController.ConsumableType type, int index, int amount)
+    {
+        if (levelProgress.consumables.ContainsKey(type))
+        {
+            levelProgress.consumables[type] += amount;
+        }
+        else
+        {
+            levelProgress.consumables[type] = amount;
+        }
+
+        if (type == ConsumableController.ConsumableType.Sample)
+        {
+            GameProgress.Instance.samplesCollected[index] = true;
+        }
+
+        UpdateConsumablesUI(type, levelProgress.consumables[type]);
+    }
+
+    void UpdateConsumablesUI(ConsumableController.ConsumableType type, int amount)
     {
         switch (type)
         {
@@ -89,10 +108,11 @@ public class GameController : MonoBehaviour {
         questionController.ShowQuestion(questionId, onAnswerCb);
     }
 
-    void OnQuestionAnswered(int amount)
+    public void UpdateQuestion(int amount)
     {
-        questionsCurrent.text = amount.ToString();
-    }
+        levelProgress.answeredQuestions += amount;
+        questionsCurrent.text = levelProgress.answeredQuestions.ToString();
+    }    
 
     void OnDestroy()
     {

@@ -7,7 +7,7 @@ public class BaseInteractiveElementEditor : Editor {
 
     BaseInteractiveElement interactiveElement;
 
-    void OnEnable()
+    protected virtual void OnEnable()
     {
         interactiveElement = target as BaseInteractiveElement;
     }
@@ -15,7 +15,11 @@ public class BaseInteractiveElementEditor : Editor {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
+        DrawShapeSelector();
+    }
 
+    protected void DrawShapeSelector()
+    {
         Collider2D collider2D = interactiveElement.GetComponent<Collider2D>();
         if (collider2D == null)
         {
@@ -33,7 +37,7 @@ public class BaseInteractiveElementEditor : Editor {
         if (GUILayout.Button("Edge")) { ReplaceBaseColliderType<EdgeCollider2D>(); }
 
         EditorGUILayout.EndHorizontal();
-        
+
         EditorGUILayout.EndVertical();
     }
 

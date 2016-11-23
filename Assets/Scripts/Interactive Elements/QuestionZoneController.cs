@@ -67,7 +67,7 @@ public class QuestionZoneController : BaseInteractiveElement {
         yield return tweener.WaitForCompletion();
         yield return null;
 
-        character.UpdateQuestion(1);
+        GameController.Instance.UpdateQuestion(1);
 
         Object.Destroy(this.gameObject);
 

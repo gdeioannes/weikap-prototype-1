@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu(fileName = "NewQuestionsDB", menuName = "QuestionsDB")]
+[CreateAssetMenu(fileName = "NewQuestionsDB", menuName = "Weikap/DB/Questions")]
 public class QuestionsDBScriptableObject : ScriptableObject
 {
     [System.Serializable]

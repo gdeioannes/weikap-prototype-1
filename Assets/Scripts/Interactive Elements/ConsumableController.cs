@@ -11,7 +11,8 @@ public class ConsumableController : BaseInteractiveElement
     }
 
     public ConsumableType type;
-    [SerializeField] int amount = 1;
+    public int id;
+    public int amount = 1;
 
     protected override void OnCharacterEnter(CharacterControl character)
     {
@@ -43,7 +44,7 @@ public class ConsumableController : BaseInteractiveElement
         tweener.SetEase(GameController.Instance.consumableMovEaseType);
         yield return tweener.WaitForCompletion();
         yield return null;
-        character.UpdateConsumable(type, amount);
+        GameController.Instance.UpdateConsumable(type, id, amount);
         base.OnCharacterEnter(character);
 
         yield break;

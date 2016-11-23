@@ -13,10 +13,10 @@ public class CharacterControl : MonoBehaviour {
         public float vertical;
     }
 
-    Rigidbody2D rigidBody;
-    Dictionary<ConsumableController.ConsumableType,int> consumables;
+    Rigidbody2D rigidBody;    
+
     float initialInvinsibleTime;
-    int answeredQuestions = 0;
+    
     float lastHDirection = 1;
     bool upButtonLocked;
 
@@ -30,15 +30,12 @@ public class CharacterControl : MonoBehaviour {
     [SerializeField] float invincibleTime;
 
     public bool IsInvincible { get; private set; }
-    public bool IsOnSurface { get; set; }
-    public System.Action<ConsumableController.ConsumableType, int> OnConsumableAmountUpdated = delegate { };
-    public System.Action<float> OnEnergyUpdated = delegate { };
-    public System.Action<int> OnQuestionAnswered = delegate { };
+    public bool IsOnSurface { get; set; }    
+    public System.Action<float> OnEnergyUpdated = delegate { };    
 
     void Awake()
     {
-        rigidBody = this.GetComponent<Rigidbody2D>();
-        consumables = new Dictionary<ConsumableController.ConsumableType, int>();
+        rigidBody = this.GetComponent<Rigidbody2D>();        
     }
 
     // Update is called once per frame
@@ -109,24 +106,7 @@ public class CharacterControl : MonoBehaviour {
         }
     }
 
-    public void UpdateConsumable(ConsumableController.ConsumableType type, int amount)
-    {
-        if (consumables.ContainsKey(type))
-        {
-            consumables[type] += amount;
-        }
-        else {
-            consumables[type] = amount;
-        }
-
-        OnConsumableAmountUpdated(type, consumables[type]);
-    }
-
-    public void UpdateQuestion(int amount)
-    {
-        answeredQuestions += amount;
-        OnQuestionAnswered(answeredQuestions);
-    }
+    
 
     IEnumerator InvinsibleTimeCoroutine()
     {
