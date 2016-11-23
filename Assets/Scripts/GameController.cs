@@ -6,7 +6,8 @@ public class GameController : MonoBehaviour {
     [Header("Config")]
 
     public QuestionsDBScriptableObject questionsDB;
-    public LevelProgress levelProgress;
+    public SamplesDBScriptableObject samplesDB;
+    public LevelProgress levelProgress;    
     [SerializeField] TwoDCameraFollower cameraFollower;
     [SerializeField] LevelContainer levelContainer;
     [SerializeField] CharacterControl characterPrefab;
@@ -20,6 +21,7 @@ public class GameController : MonoBehaviour {
     [SerializeField] UnityEngine.UI.Text samplesMax;
     [SerializeField] UnityEngine.UI.Text questionsCurrent;
     [SerializeField] UnityEngine.UI.Text questionsMax;
+    [SerializeField] SamplesInLevelController samplesUIController;
     [SerializeField] QuestionsPopUpController questionController;
 
     public Transform CoinsIconContainer;    
@@ -46,6 +48,7 @@ public class GameController : MonoBehaviour {
         coinsMax.text = levelContainer.CoinsCount.ToString();
         samplesMax.text = levelContainer.SamplesCount.ToString();
         questionsMax.text = levelContainer.QuestionsCount.ToString();
+        samplesUIController.FillSamplesInLevel(levelContainer.samplesInLevel);
         SpawnCharacterOnMap();
     }
 
@@ -74,7 +77,7 @@ public class GameController : MonoBehaviour {
 
         if (type == ConsumableController.ConsumableType.Sample)
         {
-            GameProgress.Instance.samplesCollected[index] = true;
+            GameProgress.Instance.UpdateSamplesCollected(index);
         }
 
         UpdateConsumablesUI(type, levelProgress.consumables[type]);

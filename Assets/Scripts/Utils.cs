@@ -3,6 +3,17 @@ using System.Collections;
 
 public static class Utils {
 
+    public static void DestroyChildren(this Transform parent)
+    {
+        while (parent.childCount > 0)
+        {
+            var child = parent.GetChild(0);
+            child.gameObject.SetActive(false);
+            child.SetParent(null); // unparent object
+            Object.Destroy(child.gameObject);
+        }
+    }
+
     public static Vector2 WorldToCanvasPosition(Vector3 position, Camera camera, RectTransform canvas)
     {
         //Vector position (percentage from 0 to 1) considering camera size.

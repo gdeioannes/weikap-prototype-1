@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class LevelContainer : MonoBehaviour
 {
@@ -53,6 +54,7 @@ public class LevelContainer : MonoBehaviour
     public int CoinsCount { get; private set; }
     public int SamplesCount { get; private set; }
     public int QuestionsCount { get; private set; }
+    public List<int> samplesInLevel { get; private set; }
 
     void Awake()
     {
@@ -63,6 +65,17 @@ public class LevelContainer : MonoBehaviour
         CoinsCount = parentContainer.childCount;
         parentContainer = this.CreateContainer(string.Format("{0}/{1}_{2}", CONSUMABLE_ZONE_CONTAINER_NAME, CONSUMABLE_TYPE_CONTAINER_NAME, ConsumableController.ConsumableType.Sample));
         SamplesCount = parentContainer.childCount;
+
+        samplesInLevel = new List<int>();
+        ConsumableController[] sampleControllers = parentContainer.GetComponentsInChildren<ConsumableController>();
+        foreach (var item in sampleControllers)
+        {
+            if (item.type == ConsumableController.ConsumableType.Sample)
+            {
+                samplesInLevel.Add(item.id);
+            }
+        }
+
         parentContainer = this.CreateContainer(QUESTIONS_CONTAINER_NAME);
         QuestionsCount = parentContainer.childCount;
     }

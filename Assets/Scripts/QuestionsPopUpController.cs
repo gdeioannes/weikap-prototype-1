@@ -22,16 +22,14 @@ public class QuestionsPopUpController : MonoBehaviour {
     {
         questionInfo = GameController.Instance.GetQuestionInfoById(questionIndex);
         title.text = questionInfo.Name;
-               
-        while (answersContainer.transform.childCount > 0)
+
+        var buttons = answersContainer.GetComponentsInChildren<UnityEngine.UI.Button>();
+        foreach (var button in buttons)
         {
-            var child = answersContainer.transform.GetChild(0);
-            child.gameObject.SetActive(false);
-            UnityEngine.UI.Button button = child.GetComponentInChildren<UnityEngine.UI.Button>();
-            if (button != null) { button.onClick.RemoveAllListeners(); }
-            child.SetParent(null); // unparent object
-            Object.Destroy(child.gameObject);
+            button.onClick.RemoveAllListeners();
         }
+
+        answersContainer.transform.DestroyChildren();
 
         for (int i = 0; i < questionInfo.answers.Length; ++i)
         {
