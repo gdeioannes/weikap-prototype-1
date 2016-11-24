@@ -6,10 +6,12 @@ public class SamplesInLevelController : MonoBehaviour {
 
     public SampleUIIconController sampleUIIconPrefab;
     public Transform iconsContainer;
+    private Dictionary<int, Transform> iconContainers;
 
     public void FillSamplesInLevel(List<int> samples)
     {
         iconsContainer.DestroyChildren();
+        iconContainers = new Dictionary<int, Transform>();
         HashSet<int> addedElements = new HashSet<int>();
 
         foreach (var item in samples)
@@ -21,7 +23,17 @@ public class SamplesInLevelController : MonoBehaviour {
                 newSampleIcon.Set(item);
                 newSampleIcon.gameObject.SetActive(true);
                 addedElements.Add(item);
+                iconContainers[item] = newSampleIcon.transform;
             }
         }
+    }
+
+    public Transform GetSampleIconTransform(int sampleId)
+    {
+        if (iconContainers.ContainsKey(sampleId))
+        {
+            return iconContainers[sampleId];
+        }
+        return null;
     }
 }

@@ -36,7 +36,7 @@ public class ConsumableController : BaseInteractiveElement
                 endPosition = GameController.Instance.CoinsIconContainer.position;
                 break;
             case ConsumableType.Sample:
-                endPosition = GameController.Instance.SamplesIconContainer.position;
+                endPosition = GameController.Instance.GetSampleIconContainer(id).position;
                 break;
         }
 

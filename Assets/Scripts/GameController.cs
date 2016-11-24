@@ -16,16 +16,13 @@ public class GameController : MonoBehaviour {
     [Header("UI Elements")]
     [SerializeField] UnityEngine.UI.Slider energySlider;    
     [SerializeField] UnityEngine.UI.Text coinsCurrent;
-    [SerializeField] UnityEngine.UI.Text coinsMax;
-    [SerializeField] UnityEngine.UI.Text samplesCurrent;
-    [SerializeField] UnityEngine.UI.Text samplesMax;
+    [SerializeField] UnityEngine.UI.Text coinsMax;    
     [SerializeField] UnityEngine.UI.Text questionsCurrent;
     [SerializeField] UnityEngine.UI.Text questionsMax;
     [SerializeField] SamplesInLevelController samplesUIController;
     [SerializeField] QuestionsPopUpController questionController;
 
-    public Transform CoinsIconContainer;    
-    public Transform SamplesIconContainer;
+    public Transform CoinsIconContainer;
     public Transform QuestionsIconContainer;
     public Camera WorldCamera;
     public RectTransform UIMainRectTransform;
@@ -46,7 +43,6 @@ public class GameController : MonoBehaviour {
     void Start()
     {
         coinsMax.text = levelContainer.CoinsCount.ToString();
-        samplesMax.text = levelContainer.SamplesCount.ToString();
         questionsMax.text = levelContainer.QuestionsCount.ToString();
         samplesUIController.FillSamplesInLevel(levelContainer.samplesInLevel);
         SpawnCharacterOnMap();
@@ -90,9 +86,6 @@ public class GameController : MonoBehaviour {
             case ConsumableController.ConsumableType.Coin:
                 coinsCurrent.text = amount.ToString();                
                 break;
-            case ConsumableController.ConsumableType.Sample:
-                samplesCurrent.text = amount.ToString();
-                break;
         }
     }
 
@@ -115,7 +108,12 @@ public class GameController : MonoBehaviour {
     {
         levelProgress.answeredQuestions += amount;
         questionsCurrent.text = levelProgress.answeredQuestions.ToString();
-    }    
+    }
+
+    public Transform GetSampleIconContainer(int sampleId)
+    {
+        return samplesUIController.GetSampleIconTransform(sampleId);
+    }
 
     void OnDestroy()
     {
