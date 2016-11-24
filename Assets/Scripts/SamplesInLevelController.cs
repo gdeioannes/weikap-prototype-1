@@ -20,6 +20,7 @@ public class SamplesInLevelController : MonoBehaviour {
                 newSampleIcon.transform.SetParent(iconsContainer, false);                
                 newSampleIcon.Set(item);
                 newSampleIcon.gameObject.SetActive(true);
+                addedElements.Add(item);
             }
         }
     }
