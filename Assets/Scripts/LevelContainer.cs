@@ -14,6 +14,7 @@ public class LevelContainer : MonoBehaviour
     const string LIMIT_ZONES_CONTAINER_NAME = "LimitZonesContainer";
     const string SPAWN_POINTS_CONTAINER_NAME = "SpawnPoints";
     const string WIND_ZONES_CONTAINER_NAME = "WindZonesContainer";
+    const string VOLCANO_ZONES_CONTAINER_NAME = "VolcanoZonesContainer";
     const string SURFACE_ZONES_CONTAINER_NAME = "SurfaceZonesContainer";
     const string DAMAGE_ZONES_CONTAINER_NAME = "DamageZonesContainer";
     const string CONSUMABLE_ZONE_CONTAINER_NAME = "ConsumablesContainer";
@@ -24,6 +25,7 @@ public class LevelContainer : MonoBehaviour
     const string LIMIT_ZONES_CHILD = "LimitZone";
     const string SPAWN_POINT_CHILD = "SpawnPoint";
     const string WIND_ZONE_CHILD = "WindZone";
+    const string VOLCANO_ZONE_CHILD = "VolcanoZone";
     const string SURFACE_ZONE_CHILD = "SurfaceZone";
     const string DAMAGE_ZONE_CHILD = "DamageZone";
     const string CONSUMABLE_ZONE_CHILD = "Consumable";
@@ -37,6 +39,7 @@ public class LevelContainer : MonoBehaviour
     public ConsumableConfig[] consumablesConfig;
     public GameObject damageZonePrefab;
     public GameObject windZonePrefab;
+    public GameObject volcanoZonePrefab;
     public GameObject questionPrefab;
     public GameObject spawnPointPrefab;
 
@@ -156,6 +159,20 @@ public class LevelContainer : MonoBehaviour
 
         #if UNITY_EDITOR
         UnityEditor.Selection.activeGameObject = windZoneGo;
+        #endif
+    }
+
+    [ContextMenu("Create Volcano Zone")]
+    void CreateVolcanoZone()
+    {
+        Transform parent = CreateContainer(VOLCANO_ZONES_CONTAINER_NAME);
+        string childName = string.Format("{0}_{1}", VOLCANO_ZONE_CHILD, parent.childCount);
+        GameObject zoneGo = Object.Instantiate<GameObject>(volcanoZonePrefab);
+        zoneGo.name = childName;
+        zoneGo.transform.SetParent(parent, false);
+
+        #if UNITY_EDITOR
+        UnityEditor.Selection.activeGameObject = zoneGo;
         #endif
     }
 

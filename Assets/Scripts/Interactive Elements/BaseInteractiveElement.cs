@@ -5,8 +5,9 @@ using System.Collections.Generic;
 public class BaseInteractiveElement : MonoBehaviour
 {
     Dictionary<Collider2D, CharacterControl> activeElements;
+    
 
-    void OnEnable()
+    protected virtual void OnEnable()
     {
         Collider2D collider2D = this.GetComponent<Collider2D>();
         if (collider2D == null) // add simple collider if no one was found

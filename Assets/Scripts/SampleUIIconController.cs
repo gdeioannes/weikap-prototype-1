@@ -11,7 +11,7 @@ public class SampleUIIconController : MonoBehaviour {
     {
         this.sampleId = sampleId;
         SamplesDBScriptableObject.Sample sample = GameController.Instance.samplesDB.samples[sampleId];
-        bool collectedStatus = GameProgress.Instance.SamplesCollected.Contains(sampleId);
+        bool collectedStatus = GameProgress.Instance.SamplesCollected.Contains(sampleId);                
 
         icon.sprite = sample.Icon;
         icon.color = sample.IconColor;

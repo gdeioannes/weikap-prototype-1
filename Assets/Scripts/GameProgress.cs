@@ -11,7 +11,7 @@ public class GameProgress : MonoBehaviour
 
     void OnAwake()
     {
-        Object.DontDestroyOnLoad(this.gameObject);
+        Object.DontDestroyOnLoad(this.gameObject);        
     }
 
     public static void Instantiate()

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class DamageZoneController : BaseInteractiveElement {
 
@@ -13,5 +14,5 @@ public class DamageZoneController : BaseInteractiveElement {
     protected override void OnCharacterStay(CharacterControl character)
     {
         character.UpdateEnergy(-damageValue);
-    }
+    }   
 }
