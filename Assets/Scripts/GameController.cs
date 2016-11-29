@@ -5,9 +5,9 @@ public class GameController : MonoBehaviour {
 
     [Header("Config")]
 
-    public QuestionsDBScriptableObject questionsDB;
-    public SamplesDBScriptableObject samplesDB;
-    public LevelProgress levelProgress;    
+    public QuestionsDBScriptableObject questionsDB;    
+    public LevelProgress levelProgress;
+    [SerializeField] SamplesDBScriptableObject samplesDB;
     [SerializeField] TwoDCameraFollower cameraFollower;
     [SerializeField] LevelContainer levelContainer;
     [SerializeField] CharacterControl characterPrefab;
@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour {
     [SerializeField] UnityEngine.UI.Text questionsCurrent;
     [SerializeField] UnityEngine.UI.Text questionsMax;
     [SerializeField] SamplesInLevelController samplesUIController;
+    [SerializeField] SamplesPopUpController samplesPopUpController;
     [SerializeField] QuestionsPopUpController questionController;
 
     public Transform CoinsIconContainer;
@@ -31,6 +32,7 @@ public class GameController : MonoBehaviour {
     public DG.Tweening.Ease consumableMovEaseType = DG.Tweening.Ease.InCubic;
 
     public static GameController Instance { get; private set; }
+    public SamplesDBScriptableObject.Sample[] SamplesDB { get { return this.samplesDB.samples; } }
 
     void Awake()
     {
@@ -102,6 +104,11 @@ public class GameController : MonoBehaviour {
     public void DisplayQuestion(int questionId, System.Action<bool> onAnswerCb)
     {
         questionController.ShowQuestion(questionId, onAnswerCb);
+    }
+
+    public void DisplaySamplesPopUp(int sampleId)
+    {
+        samplesPopUpController.Show(sampleId);
     }
 
     public void UpdateQuestion(int amount)

@@ -12,7 +12,7 @@ public class SamplesDBScriptableObject : ScriptableObject {
 
         public Sprite Icon;
         public Color IconColor;
-        public Texture2D Image;
+        public Texture Image;
         public Color ImageColor;
     }
 
