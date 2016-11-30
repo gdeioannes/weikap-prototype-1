@@ -15,6 +15,7 @@ public class LevelContainer : MonoBehaviour
     const string SPAWN_POINTS_CONTAINER_NAME = "SpawnPoints";
     const string WIND_ZONES_CONTAINER_NAME = "WindZonesContainer";
     const string VOLCANO_ZONES_CONTAINER_NAME = "VolcanoZonesContainer";
+    const string GEYSER_ZONES_CONTAINER_NAME = "GeyserZonesContainer";
     const string SURFACE_ZONES_CONTAINER_NAME = "SurfaceZonesContainer";
     const string DAMAGE_ZONES_CONTAINER_NAME = "DamageZonesContainer";
     const string CONSUMABLE_ZONE_CONTAINER_NAME = "ConsumablesContainer";
@@ -26,6 +27,7 @@ public class LevelContainer : MonoBehaviour
     const string SPAWN_POINT_CHILD = "SpawnPoint";
     const string WIND_ZONE_CHILD = "WindZone";
     const string VOLCANO_ZONE_CHILD = "VolcanoZone";
+    const string GEYSER_ZONE_CHILD = "GeyserZone";
     const string SURFACE_ZONE_CHILD = "SurfaceZone";
     const string DAMAGE_ZONE_CHILD = "DamageZone";
     const string CONSUMABLE_ZONE_CHILD = "Consumable";
@@ -40,6 +42,7 @@ public class LevelContainer : MonoBehaviour
     public GameObject damageZonePrefab;
     public GameObject windZonePrefab;
     public GameObject volcanoZonePrefab;
+    public GameObject geyserZonePrefab;
     public GameObject questionPrefab;
     public GameObject spawnPointPrefab;
 
@@ -168,6 +171,20 @@ public class LevelContainer : MonoBehaviour
         Transform parent = CreateContainer(VOLCANO_ZONES_CONTAINER_NAME);
         string childName = string.Format("{0}_{1}", VOLCANO_ZONE_CHILD, parent.childCount);
         GameObject zoneGo = Object.Instantiate<GameObject>(volcanoZonePrefab);
+        zoneGo.name = childName;
+        zoneGo.transform.SetParent(parent, false);
+
+        #if UNITY_EDITOR
+        UnityEditor.Selection.activeGameObject = zoneGo;     
+        #endif
+    }
+
+    [ContextMenu("Create Geyser Zone")]
+    void CreateGeyserZone()
+    {
+        Transform parent = CreateContainer(GEYSER_ZONES_CONTAINER_NAME);
+        string childName = string.Format("{0}_{1}", GEYSER_ZONE_CHILD, parent.childCount);
+        GameObject zoneGo = Object.Instantiate<GameObject>(geyserZonePrefab);
         zoneGo.name = childName;
         zoneGo.transform.SetParent(parent, false);
 
