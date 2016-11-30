@@ -16,7 +16,7 @@ public class BaseInteractiveElement : MonoBehaviour
         }
     }
 
-    void Awake()
+    protected virtual void Awake()
     {
         activeElements = new Dictionary<Collider2D, CharacterControl>();
     }

@@ -38,6 +38,7 @@ public class LevelContainer : MonoBehaviour
     public Vector2 Size;
     [Header("Level elements config")]
     public SpawnPoint[] spawnPoints;
+    public EndPoint endPoint;
     public ConsumableConfig[] consumablesConfig;
     public GameObject damageZonePrefab;
     public GameObject windZonePrefab;
