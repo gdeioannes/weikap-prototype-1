@@ -1,63 +1,57 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TimedEffectZone : MonoBehaviour
+public class TimedEffectZone : BaseTimedEffectZone
 {
-    [SerializeField] Behaviour[] componentsToTurnOff;
+    [SerializeField] Behaviour[] componentsToTurnOff; 
     [SerializeField] GameObject[] gameObjectsToTurnOff;
     [SerializeField] ParticleSystem[] particlesToTurnOff;
-    [SerializeField] float waitInterval;
-    [SerializeField] float activeInterval;
-
-    IEnumerator Start()
+        
+    protected override void DeactivateElements()
     {
-        while (true)
+        foreach (var item in componentsToTurnOff)
         {
-            foreach (var item in componentsToTurnOff)
+            item.enabled = false;
+        }
+
+        if (gameObjectsToTurnOff != null && gameObjectsToTurnOff.Length > 0)
+        {
+            foreach (var item in gameObjectsToTurnOff)
             {
-                item.enabled = false;
+                item.SetActive(false);
             }
+        }
 
-            if (gameObjectsToTurnOff != null && gameObjectsToTurnOff.Length > 0)
+        if (particlesToTurnOff != null && particlesToTurnOff.Length > 0)
+        {
+            foreach (var item in particlesToTurnOff)
             {
-                foreach (var item in gameObjectsToTurnOff)
-                {
-                    item.SetActive(false);
-                }
+                item.Stop(true);
             }
+        }
+    }
 
-            if (particlesToTurnOff != null && particlesToTurnOff.Length > 0)
+    protected override void ActivateElements()
+    {
+        foreach (var item in componentsToTurnOff)
+        {
+            item.enabled = true;
+        }
+
+        if (gameObjectsToTurnOff != null && gameObjectsToTurnOff.Length > 0)
+        {
+            foreach (var item in gameObjectsToTurnOff)
             {
-                foreach (var item in particlesToTurnOff)
-                {
-                    item.Stop(true);
-                }
+                item.SetActive(true);
             }
+        }
 
-            yield return new WaitForSeconds(waitInterval);
-
-            foreach (var item in componentsToTurnOff)
+        if (particlesToTurnOff != null && particlesToTurnOff.Length > 0)
+        {
+            foreach (var item in particlesToTurnOff)
             {
-                item.enabled = true;
+                item.Play(true);
             }
-
-            if (gameObjectsToTurnOff != null && gameObjectsToTurnOff.Length > 0)
-            {
-                foreach (var item in gameObjectsToTurnOff)
-                {
-                    item.SetActive(true);
-                }
-            }
-
-            if (particlesToTurnOff != null && particlesToTurnOff.Length > 0)
-            {
-                foreach (var item in particlesToTurnOff)
-                {
-                    item.Play(true);
-                }
-            }            
-
-            yield return new WaitForSeconds(activeInterval);
         }
     }
 }
