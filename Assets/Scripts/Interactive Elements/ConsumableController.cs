@@ -19,7 +19,7 @@ public class ConsumableController : BaseInteractiveElement
         StartCoroutine(IncrementConsumableCountCoroutine(character));
     }
 
-    IEnumerator IncrementConsumableCountCoroutine(CharacterControl character)
+    protected IEnumerator IncrementConsumableCountCoroutine(CharacterControl character)
     {
         Vector3 worldPosition = transform.position;
         Vector3 screenPosition = Utils.WorldToCanvasPosition(worldPosition, GameController.Instance.WorldCamera, GameController.Instance.UIMainRectTransform);
@@ -45,8 +45,7 @@ public class ConsumableController : BaseInteractiveElement
         yield return tweener.WaitForCompletion();
         yield return null;
         GameController.Instance.UpdateConsumable(type, id, amount);
-        base.OnCharacterEnter(character);
-
+        Object.Destroy(this.gameObject);
         yield break;
-    }
+    }    
 }

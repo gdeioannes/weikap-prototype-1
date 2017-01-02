@@ -5,6 +5,8 @@ using DG.Tweening;
 public class QuestionZoneController : BaseInteractiveElement {
 
     [SerializeField] int questionId;
+    [SerializeField] int coinsAfterRightAnswer;
+    public ConsumableController coinControllerPrefab;
     CharacterControl character;
     bool questionDisplayed = false;
 
@@ -41,13 +43,25 @@ public class QuestionZoneController : BaseInteractiveElement {
         if (result)
         {
             character.UpdateEnergy(GameController.Instance.questionsDB.EnergyAfterRightAnswer);
-            StartCoroutine(MoveQuestionToUI(character));
+            SpawnCoinAndMoveToUI();
+            StartCoroutine(MoveQuestionToUI(character));            
         }
         else
         {
             character.UpdateEnergy(GameController.Instance.questionsDB.EnergyAfterWrongAnswer);
             questionDisplayed = false;
         }
+    }
+
+    void SpawnCoinAndMoveToUI()
+    {
+        ConsumableController coinController = Object.Instantiate<ConsumableController>(coinControllerPrefab);
+        coinController.gameObject.layer = this.gameObject.layer;
+        coinController.gameObject.transform.SetParent(this.gameObject.transform.parent, false);
+        coinController.gameObject.transform.position = this.transform.position;
+
+        coinController.amount = coinsAfterRightAnswer;
+        coinController.type = ConsumableController.ConsumableType.Coin;                
     }
 
     IEnumerator MoveQuestionToUI(CharacterControl character)
@@ -68,9 +82,7 @@ public class QuestionZoneController : BaseInteractiveElement {
         yield return null;
 
         GameController.Instance.UpdateQuestion(1);
-
-        Object.Destroy(this.gameObject);
-
+        base.OnCharacterEnter(character);
         yield break;
-    }
+    }    
 }

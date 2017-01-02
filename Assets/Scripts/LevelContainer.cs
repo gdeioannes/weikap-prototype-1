@@ -252,6 +252,8 @@ public class LevelContainer : MonoBehaviour
         GameObject questionGo = Object.Instantiate<GameObject>(questionPrefab);
         questionGo.name = childName;
         questionGo.transform.SetParent(parent, false);
+        QuestionZoneController questionController = questionGo.GetComponent<QuestionZoneController>();
+        questionController.coinControllerPrefab = GetConsumablePrefabReference(ConsumableController.ConsumableType.Coin).GetComponent<ConsumableController>();
 
         #if UNITY_EDITOR
         UnityEditor.Selection.activeGameObject = questionGo;
@@ -266,25 +268,36 @@ public class LevelContainer : MonoBehaviour
         string childName = string.Format("{0}_{1}", CONSUMABLE_ZONE_CHILD, parent.childCount);
         GameObject childGo = null;
 
-        foreach (var prefab in consumablesConfig)
+        GameObject prefabReference = GetConsumablePrefabReference(type);
+
+        if (prefabReference != null)
         {
-            if (prefab.type == type)
-            {
-                childGo = Object.Instantiate<GameObject>(prefab.prefab);
-                break;
-            }
+            childGo = Object.Instantiate<GameObject>(prefabReference);
         }
-        if (childGo == null)
+        else
         {
             childGo = new GameObject();
             ConsumableController consumableController = childGo.AddComponent<ConsumableController>();
             consumableController.type = type;
+            
         }
 
         childGo.name = childName;
         childGo.transform.SetParent(parent, false);
         return childGo;
-    }    
+    }
+
+    GameObject GetConsumablePrefabReference(ConsumableController.ConsumableType type)
+    {
+        foreach (var prefab in consumablesConfig)
+        {
+            if (prefab.type == type)
+            {
+                return prefab.prefab;
+            }
+        }
+        return null;
+    }
 
     Transform CreateContainer(string containerName)
     {
