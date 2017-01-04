@@ -6,6 +6,7 @@ public class QuestionsPopUpController : MonoBehaviour {
     [SerializeField] UnityEngine.UI.Text title;
     [SerializeField] GameObject answersContainer;
     [SerializeField] GameObject answerPrefab;
+    [SerializeField] AnswerPopUpController answerPopUpController;
 
     private QuestionsDBScriptableObject.Question questionInfo;
 
@@ -48,9 +49,11 @@ public class QuestionsPopUpController : MonoBehaviour {
     {
         this.gameObject.SetActive(false);
         Time.timeScale = 1;
+        bool result = answerIndex == questionInfo.rightAnswerIndex;
         if (onAnswerCb != null)
         {
-            onAnswerCb(answerIndex == questionInfo.rightAnswerIndex);
+            onAnswerCb(result);
         }
+        answerPopUpController.Show(result);
     }
 }
