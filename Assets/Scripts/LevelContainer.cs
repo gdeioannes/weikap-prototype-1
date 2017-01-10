@@ -4,13 +4,6 @@ using System.Collections.Generic;
 
 public class LevelContainer : MonoBehaviour
 {
-    [System.Serializable]
-    public struct ConsumableConfig
-    {
-        public ConsumableController.ConsumableType type;
-        public GameObject prefab;
-    }
-
     const string LIMIT_ZONES_CONTAINER_NAME = "LimitZonesContainer";
     const string SPAWN_POINTS_CONTAINER_NAME = "SpawnPoints";
     const string WIND_ZONES_CONTAINER_NAME = "WindZonesContainer";
@@ -18,8 +11,7 @@ public class LevelContainer : MonoBehaviour
     const string GEYSER_ZONES_CONTAINER_NAME = "GeyserZonesContainer";
     const string SURFACE_ZONES_CONTAINER_NAME = "SurfaceZonesContainer";
     const string DAMAGE_ZONES_CONTAINER_NAME = "DamageZonesContainer";
-    const string CONSUMABLE_ZONE_CONTAINER_NAME = "ConsumablesContainer";
-    const string QUESTIONS_CONTAINER_NAME = "QuestionsContainer";
+    const string CONSUMABLE_ZONE_CONTAINER_NAME = "ConsumablesContainer";    
 
     const string CONSUMABLE_TYPE_CONTAINER_NAME = "ConsumableType";
 
@@ -39,12 +31,11 @@ public class LevelContainer : MonoBehaviour
     [Header("Level elements config")]
     public SpawnPoint[] spawnPoints;
     public EndPoint endPoint;
-    public ConsumableConfig[] consumablesConfig;
+    public InGameItemsDBScriptableObject consumablesConfig;
     public GameObject damageZonePrefab;
     public GameObject windZonePrefab;
     public GameObject volcanoZonePrefab;
-    public GameObject geyserZonePrefab;
-    public GameObject questionPrefab;
+    public GameObject geyserZonePrefab;    
     public GameObject spawnPointPrefab;
 
     public Vector2 CenterPosition
@@ -68,22 +59,22 @@ public class LevelContainer : MonoBehaviour
         // find all spawn points
         Transform parentContainer = this.CreateContainer(SPAWN_POINTS_CONTAINER_NAME);
         spawnPoints = parentContainer.GetComponentsInChildren<SpawnPoint>();
-        parentContainer = this.CreateContainer(string.Format("{0}/{1}_{2}",CONSUMABLE_ZONE_CONTAINER_NAME, CONSUMABLE_TYPE_CONTAINER_NAME, ConsumableController.ConsumableType.Coin));
+        parentContainer = this.CreateContainer(string.Format("{0}/{1}_{2}",CONSUMABLE_ZONE_CONTAINER_NAME, CONSUMABLE_TYPE_CONTAINER_NAME, InGameItemsDBScriptableObject.ItemType.Coin));
         CoinsCount = parentContainer.childCount;
-        parentContainer = this.CreateContainer(string.Format("{0}/{1}_{2}", CONSUMABLE_ZONE_CONTAINER_NAME, CONSUMABLE_TYPE_CONTAINER_NAME, ConsumableController.ConsumableType.Sample));
+        parentContainer = this.CreateContainer(string.Format("{0}/{1}_{2}", CONSUMABLE_ZONE_CONTAINER_NAME, CONSUMABLE_TYPE_CONTAINER_NAME, InGameItemsDBScriptableObject.ItemType.Sample));
         SamplesCount = parentContainer.childCount;
 
         samplesInLevel = new List<int>();
         ConsumableController[] sampleControllers = parentContainer.GetComponentsInChildren<ConsumableController>();
         foreach (var item in sampleControllers)
         {
-            if (item.type == ConsumableController.ConsumableType.Sample)
+            if (item.type == InGameItemsDBScriptableObject.ItemType.Sample)
             {
                 samplesInLevel.Add(item.id);
             }
         }
 
-        parentContainer = this.CreateContainer(QUESTIONS_CONTAINER_NAME);
+        parentContainer = this.CreateContainer(string.Format("{0}/{1}{2}", CONSUMABLE_ZONE_CONTAINER_NAME, CONSUMABLE_TYPE_CONTAINER_NAME, InGameItemsDBScriptableObject.ItemType.Question));
         QuestionsCount = parentContainer.childCount;
     }
 
@@ -227,7 +218,7 @@ public class LevelContainer : MonoBehaviour
     [ContextMenu("Create Coin Consumable")]
     void CreateCoinConsumable()
     {
-        GameObject newConsumable = CreateConsumableObject(ConsumableController.ConsumableType.Coin);
+        GameObject newConsumable = CreateConsumableObject(InGameItemsDBScriptableObject.ItemType.Coin);
         
         #if UNITY_EDITOR
         UnityEditor.Selection.activeGameObject = newConsumable;
@@ -237,7 +228,7 @@ public class LevelContainer : MonoBehaviour
     [ContextMenu("Create Sample Consumable")]
     void CreateSampleConsumable()
     {
-        GameObject newConsumable = CreateConsumableObject(ConsumableController.ConsumableType.Sample);
+        GameObject newConsumable = CreateConsumableObject(InGameItemsDBScriptableObject.ItemType.Sample);
 
         #if UNITY_EDITOR
         UnityEditor.Selection.activeGameObject = newConsumable;
@@ -247,20 +238,17 @@ public class LevelContainer : MonoBehaviour
     [ContextMenu("Create Question Object")]
     void CreateQuestionObject()
     {
-        Transform parent = CreateContainer(QUESTIONS_CONTAINER_NAME);
-        string childName = string.Format("{0}_{1}", QUESTION_CHILD, parent.childCount);
-        GameObject questionGo = Object.Instantiate<GameObject>(questionPrefab);
-        questionGo.name = childName;
-        questionGo.transform.SetParent(parent, false);
-        QuestionZoneController questionController = questionGo.GetComponent<QuestionZoneController>();
-        questionController.coinControllerPrefab = GetConsumablePrefabReference(ConsumableController.ConsumableType.Coin).GetComponent<ConsumableController>();
+        GameObject newConsumable = CreateConsumableObject(InGameItemsDBScriptableObject.ItemType.Question);
+
+        QuestionZoneController questionController = newConsumable.GetComponent<QuestionZoneController>();
+        questionController.coinControllerPrefab = GetConsumablePrefabReference(InGameItemsDBScriptableObject.ItemType.Coin).GetComponent<ConsumableController>();
 
         #if UNITY_EDITOR
-        UnityEditor.Selection.activeGameObject = questionGo;
+        UnityEditor.Selection.activeGameObject = newConsumable;
         #endif
     }
 
-    GameObject CreateConsumableObject(ConsumableController.ConsumableType type)
+    GameObject CreateConsumableObject(InGameItemsDBScriptableObject.ItemType type)
     {
         string containerName = string.Format("{0}/{1}_{2}", CONSUMABLE_ZONE_CONTAINER_NAME, CONSUMABLE_TYPE_CONTAINER_NAME, type.ToString());
 
@@ -287,14 +275,11 @@ public class LevelContainer : MonoBehaviour
         return childGo;
     }
 
-    GameObject GetConsumablePrefabReference(ConsumableController.ConsumableType type)
+    GameObject GetConsumablePrefabReference(InGameItemsDBScriptableObject.ItemType type)
     {
-        foreach (var prefab in consumablesConfig)
+        if (consumablesConfig.Items.ContainsKey(type))
         {
-            if (prefab.type == type)
-            {
-                return prefab.prefab;
-            }
+            return consumablesConfig.Items[type].prefab;
         }
         return null;
     }

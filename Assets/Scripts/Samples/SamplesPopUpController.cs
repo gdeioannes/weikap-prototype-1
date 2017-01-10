@@ -5,6 +5,9 @@ public class SamplesPopUpController : MonoBehaviour {
 
     [SerializeField] SamplesListIconController listIconPrefab;
     [SerializeField] GameObject samplesListContainer;
+
+    [SerializeField] GameObject toolsListContainer;
+    
     [SerializeField] UnityEngine.UI.Text selectedSampleName;
     [SerializeField] UnityEngine.UI.Text selectedSampleDesc;
     [SerializeField] UnityEngine.UI.RawImage collectedSelectedSampleImage;

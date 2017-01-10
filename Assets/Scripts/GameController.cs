@@ -62,7 +62,7 @@ public class GameController : MonoBehaviour {
         cameraFollower.enabled = true;
     }
 
-    public void UpdateConsumable(ConsumableController.ConsumableType type, int index, int amount)
+    public void UpdateConsumable(InGameItemsDBScriptableObject.ItemType type, int index, int amount)
     {
         if (levelProgress.consumables.ContainsKey(type))
         {
@@ -73,7 +73,7 @@ public class GameController : MonoBehaviour {
             levelProgress.consumables[type] = amount;
         }
 
-        if (type == ConsumableController.ConsumableType.Sample)
+        if (type == InGameItemsDBScriptableObject.ItemType.Sample)
         {
             GameProgress.Instance.UpdateSamplesCollected(index);
         }
@@ -81,11 +81,11 @@ public class GameController : MonoBehaviour {
         UpdateConsumablesUI(type, levelProgress.consumables[type]);
     }
 
-    void UpdateConsumablesUI(ConsumableController.ConsumableType type, int amount)
+    void UpdateConsumablesUI(InGameItemsDBScriptableObject.ItemType type, int amount)
     {
         switch (type)
         {
-            case ConsumableController.ConsumableType.Coin:
+            case InGameItemsDBScriptableObject.ItemType.Coin:
                 coinsCurrent.text = amount.ToString();                
                 break;
         }

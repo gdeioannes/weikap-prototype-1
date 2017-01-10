@@ -4,13 +4,7 @@ using DG.Tweening;
 
 public class ConsumableController : BaseInteractiveElement
 {
-    public enum ConsumableType
-    {
-        Coin,
-        Sample
-    }
-
-    public ConsumableType type;
+    public InGameItemsDBScriptableObject.ItemType type;
     public int id;
     public int amount = 1;
 
@@ -32,10 +26,10 @@ public class ConsumableController : BaseInteractiveElement
         Vector3 endPosition = Vector3.zero;
         switch (type)
         {
-            case ConsumableType.Coin:
+            case InGameItemsDBScriptableObject.ItemType.Coin:
                 endPosition = GameController.Instance.CoinsIconContainer.position;
                 break;
-            case ConsumableType.Sample:
+            case InGameItemsDBScriptableObject.ItemType.Sample:
                 endPosition = GameController.Instance.GetSampleIconContainer(id).position;
                 break;
         }

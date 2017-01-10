@@ -61,7 +61,7 @@ public class QuestionZoneController : BaseInteractiveElement {
         coinController.gameObject.transform.position = this.transform.position;
 
         coinController.amount = coinsAfterRightAnswer;
-        coinController.type = ConsumableController.ConsumableType.Coin;                
+        coinController.type = InGameItemsDBScriptableObject.ItemType.Coin;                
     }
 
     IEnumerator MoveQuestionToUI(CharacterControl character)

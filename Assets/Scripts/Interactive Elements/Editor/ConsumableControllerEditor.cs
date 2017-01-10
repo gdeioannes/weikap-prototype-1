@@ -34,12 +34,12 @@ public class ConsumableControllerEditor : BaseInteractiveElementEditor
 
     public override void OnInspectorGUI()
     {
-        controller.type = (ConsumableController.ConsumableType)EditorGUILayout.EnumPopup("Tipo", controller.type);
-        if (controller.type == ConsumableController.ConsumableType.Coin)
+        controller.type = (InGameItemsDBScriptableObject.ItemType)EditorGUILayout.EnumPopup("Tipo", controller.type);
+        if (controller.type == InGameItemsDBScriptableObject.ItemType.Coin)
         {
             controller.amount = EditorGUILayout.IntField("Cantidad", controller.amount);
         }
-        else if (controller.type == ConsumableController.ConsumableType.Sample)
+        else if (controller.type == InGameItemsDBScriptableObject.ItemType.Sample)
         {
             if (sampleNamesList == null || sampleNamesList.Count == 0)
             {
