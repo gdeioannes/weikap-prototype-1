@@ -22,7 +22,7 @@ public class SampleUIIconController : MonoBehaviour {
 
         if (!handlerAdded)
         {
-            GameProgress.Instance.OnSamplesCollectionUpdated += OnSamplesCollectionUpdatedHandler;
+            GameProgress.Instance.OnSamplesCollectionUpdated += OnSamplesCollectionUpdatedHandler;            
             handlerAdded = true;
         }        
     }
@@ -41,7 +41,7 @@ public class SampleUIIconController : MonoBehaviour {
         collectedStatus = GameProgress.Instance.SamplesCollected.Contains(sampleId);
         icon.enabled = collectedStatus;
         nonCollectedIcon.enabled = !collectedStatus;
-    }
+    }    
 
     public virtual void OnSelect()
     {
@@ -52,7 +52,10 @@ public class SampleUIIconController : MonoBehaviour {
     {
         if (handlerAdded)
         {
-            GameProgress.Instance.OnSamplesCollectionUpdated -= OnSamplesCollectionUpdatedHandler;
+            if (GameProgress.Instance != null)
+            {
+                GameProgress.Instance.OnSamplesCollectionUpdated -= OnSamplesCollectionUpdatedHandler;
+            }
         }        
     }
 }

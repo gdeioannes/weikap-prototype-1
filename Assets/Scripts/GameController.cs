@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour {
     public QuestionsDBScriptableObject questionsDB;    
     public LevelProgress levelProgress;
     [SerializeField] SamplesDBScriptableObject samplesDB;
+    [SerializeField] ToolsDBScriptableObject toolsDB;
     [SerializeField] TwoDCameraFollower cameraFollower;
     [SerializeField] LevelContainer levelContainer;
     [SerializeField] CharacterControl characterPrefab;
@@ -76,6 +77,10 @@ public class GameController : MonoBehaviour {
         if (type == InGameItemsDBScriptableObject.ItemType.Sample)
         {
             GameProgress.Instance.UpdateSamplesCollected(index);
+        }
+        if (type == InGameItemsDBScriptableObject.ItemType.Coin)
+        {
+            GameProgress.Instance.UpdateCoinsCollected((ulong)amount);
         }
 
         UpdateConsumablesUI(type, levelProgress.consumables[type]);

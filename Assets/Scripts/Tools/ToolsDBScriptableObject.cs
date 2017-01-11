@@ -10,5 +10,6 @@ public class ToolsDBScriptableObject : ScriptableObject
     {
         public string name;
         public string description;
+        public int unlockCost;
     }
 }

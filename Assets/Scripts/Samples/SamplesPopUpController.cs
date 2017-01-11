@@ -3,15 +3,19 @@ using System.Collections;
 
 public class SamplesPopUpController : MonoBehaviour {
 
-    [SerializeField] SamplesListIconController listIconPrefab;
+    [SerializeField] SamplesListIconController samplesListIconPrefab;
     [SerializeField] GameObject samplesListContainer;
 
+    [SerializeField] ToolsListIconController toolsListIconPrefab;
     [SerializeField] GameObject toolsListContainer;
-    
+
+    [SerializeField] UnityEngine.UI.Text coinsAmount;
     [SerializeField] UnityEngine.UI.Text selectedSampleName;
     [SerializeField] UnityEngine.UI.Text selectedSampleDesc;
     [SerializeField] UnityEngine.UI.RawImage collectedSelectedSampleImage;
     [SerializeField] UnityEngine.UI.RawImage nonCollectedSelectedSampleImage;
+
+    bool handlersAdded;
 
     public void Show(int sampleId)
     {
@@ -29,13 +33,30 @@ public class SamplesPopUpController : MonoBehaviour {
 
     void Initialize()
     {
-        var samplesList = GameController.Instance.SamplesDB;        
+        if (!handlersAdded)
+        {
+            GameProgress.Instance.OnCoinsAmountUpdated += UpdateCoinsAvailable;
+            this.coinsAmount.text = GameProgress.Instance.CoinsAvailable.ToString();
+            handlersAdded = true;
+        }
+
+        InitializeSamplesList();
+    }
+
+    void UpdateCoinsAvailable(ulong amount)
+    {
+        this.coinsAmount.text = amount.ToString();
+    }
+
+    void InitializeSamplesList()
+    {
+        var samplesList = GameController.Instance.SamplesDB;
 
         samplesListContainer.transform.DestroyChildren();
 
         for (int i = 0; i < samplesList.Length; ++i)
         {
-            var newSampleItem = Object.Instantiate<SamplesListIconController>(listIconPrefab);
+            var newSampleItem = Object.Instantiate<SamplesListIconController>(samplesListIconPrefab);
             newSampleItem.transform.SetParent(this.samplesListContainer.transform, false);
             newSampleItem.Set(i);
             newSampleItem.onSelectCb = OnSelect;
@@ -53,5 +74,16 @@ public class SamplesPopUpController : MonoBehaviour {
         collectedSelectedSampleImage.color = selectedSample.ImageColor;
         collectedSelectedSampleImage.enabled = collectedStatus;
         nonCollectedSelectedSampleImage.enabled = !collectedStatus;
+    }
+
+    void OnDestroy()
+    {
+        if (handlersAdded)
+        {
+            if (GameProgress.Instance != null)
+            {
+                GameProgress.Instance.OnCoinsAmountUpdated -= UpdateCoinsAvailable;
+            }
+        }
     }
 }
