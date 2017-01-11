@@ -43,7 +43,7 @@ public class SamplesPopUpController : MonoBehaviour {
         InitializeSamplesList();
     }
 
-    void UpdateCoinsAvailable(ulong amount)
+    void UpdateCoinsAvailable(long amount)
     {
         this.coinsAmount.text = amount.ToString();
     }

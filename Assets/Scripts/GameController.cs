@@ -80,7 +80,7 @@ public class GameController : MonoBehaviour {
         }
         if (type == InGameItemsDBScriptableObject.ItemType.Coin)
         {
-            GameProgress.Instance.UpdateCoinsCollected((ulong)amount);
+            GameProgress.Instance.UpdateCoinsCollected((long)amount);
         }
 
         UpdateConsumablesUI(type, levelProgress.consumables[type]);
