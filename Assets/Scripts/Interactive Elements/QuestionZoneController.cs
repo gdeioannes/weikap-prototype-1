@@ -81,7 +81,7 @@ public class QuestionZoneController : BaseInteractiveElement {
         yield return tweener.WaitForCompletion();
         yield return null;
 
-        GameController.Instance.UpdateQuestion(1);
+        GameController.Instance.UpdateConsumable(InGameItemsDBScriptableObject.ItemType.Question, this.questionId, 1);        
         base.OnCharacterEnter(character);
         yield break;
     }    

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public static class Utils {
 
@@ -12,6 +13,33 @@ public static class Utils {
             child.SetParent(null); // unparent object
             Object.Destroy(child.gameObject);
         }
+    }
+
+    /// <summary>
+    /// <para>Tries to get a value from a generic dictionary ...</para>
+    /// <para>It returns a default value (optionally specified by yourself) if key wasn't found</para>
+    /// </summary>
+    /// <typeparam name="T">Key type</typeparam>
+    /// <typeparam name="U">Value type</typeparam>
+    /// <param name = "dict">base dictionary</param>
+    /// <param name = "key">Key to look up</param>
+    /// <param name = "defaultValue"> default value to be returned when given key is not found in dictionary </param>
+    /// <returns>Dictionary value, if exists. Returns default value otherwise</returns>
+    public static T TryGetValue<U, T>(this Dictionary<U, T> dict, U key, T defaultValue = default(T))
+    {
+        if (key == null || string.IsNullOrEmpty(key.ToString()))
+        {
+            return defaultValue;
+        }
+
+        T toReturn;
+
+        if (dict.TryGetValue(key, out toReturn))
+        {
+            return toReturn;
+        }
+
+        return defaultValue;
     }
 
     public static Vector2 WorldToCanvasPosition(Vector3 position, Camera camera, RectTransform canvas)

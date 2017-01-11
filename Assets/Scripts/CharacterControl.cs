@@ -137,7 +137,6 @@ public class CharacterControl : MonoBehaviour {
             }
         }
 
-        // Restart current level
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        GameController.Instance.UpdateLevelProgress(GameProgress.LevelStatus.Lose);        
     }
 }

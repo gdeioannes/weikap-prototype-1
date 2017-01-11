@@ -93,6 +93,9 @@ public class GameController : MonoBehaviour {
             case InGameItemsDBScriptableObject.ItemType.Coin:
                 coinsCurrent.text = amount.ToString();                
                 break;
+            case InGameItemsDBScriptableObject.ItemType.Question:
+                questionsCurrent.text = amount.ToString();
+                break;
         }
     }
 
@@ -114,17 +117,24 @@ public class GameController : MonoBehaviour {
     public void DisplaySamplesPopUp(int sampleId)
     {
         samplesPopUpController.Show(sampleId);
-    }
-
-    public void UpdateQuestion(int amount)
-    {
-        levelProgress.answeredQuestions += amount;
-        questionsCurrent.text = levelProgress.answeredQuestions.ToString();
-    }
+    }    
 
     public Transform GetSampleIconContainer(int sampleId)
     {
         return samplesUIController.GetSampleIconTransform(sampleId);
+    }
+
+    public void UpdateLevelProgress(GameProgress.LevelStatus status)
+    {
+        levelProgress.UpdateGameProgress(status);
+        switch (status)
+        {
+            case GameProgress.LevelStatus.Win:
+            case GameProgress.LevelStatus.Lose:
+                // Restart current level
+                UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+                break;
+        }
     }
 
     void OnDestroy()
