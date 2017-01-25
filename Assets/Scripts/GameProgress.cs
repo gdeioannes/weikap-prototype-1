@@ -41,10 +41,12 @@ public class GameProgress : MonoBehaviour
         public LevelData[] levelsData;
 
         public ulong totalGameTime;
-        public int[] finishedStages;
-        public int[] lostStages;
+        public long finishedStages;
+        public long lostStages;
 
         public QuestionData[] questionsData;
+        public long rightAnsweredQuestions;
+        public long wrongAnsweredQuestions;
         public long coinsCollected;
     }
 
@@ -172,7 +174,16 @@ public class GameProgress : MonoBehaviour
         if (LevelsData[levelId].status == LevelStatus.OnGoing || (LevelsData[levelId].status == LevelStatus.Lose && status == LevelStatus.Win))
         {
             LevelsData[levelId].status = status;
-        }        
+        }
+
+        if (status == LevelStatus.Win) { gameData.finishedStages++; }
+        else { gameData.lostStages++; }
+    }
+
+    public void UpdateQuestionStats(bool rightAnswer)
+    {
+        if (rightAnswer) { this.gameData.rightAnsweredQuestions++; }
+        else { this.gameData.wrongAnsweredQuestions++; }
     }
 
     void OnDestroy()
