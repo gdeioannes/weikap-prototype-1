@@ -4215,7 +4215,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 47.55, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &313922290
@@ -7601,8 +7601,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 33ebcf00794cd904c8624995046485d7, type: 3}
-  m_Color: {r: 0.8645672, g: 0.9632353, b: 0.24789146, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 8411e03afad2846469ff9f9826500446, type: 3}
+  m_Color: {r: 0.38431376, g: 0.9725491, b: 0.48627454, a: 1}
   m_FlipX: 0
   m_FlipY: 0
 --- !u!58 &682404340
@@ -7630,7 +7630,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b57ddd2a8533b41bb173393190fc80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questionId: 1
+  type: 2
+  id: 0
+  amount: 1
   coinsAfterRightAnswer: 2
   coinControllerPrefab: {fileID: 114000010501269924, guid: 33f1f770a10c84546affa4fc6734f200,
     type: 2}
@@ -15165,6 +15167,21 @@ Prefab:
     - target: {fileID: 4000014077093792, guid: 33f1f770a10c84546affa4fc6734f200, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212000013832666446, guid: 33f1f770a10c84546affa4fc6734f200,
+        type: 2}
+      propertyPath: m_Color.r
+      value: 0.38431376
+      objectReference: {fileID: 0}
+    - target: {fileID: 212000013832666446, guid: 33f1f770a10c84546affa4fc6734f200,
+        type: 2}
+      propertyPath: m_Color.g
+      value: 0.9725491
+      objectReference: {fileID: 0}
+    - target: {fileID: 212000013832666446, guid: 33f1f770a10c84546affa4fc6734f200,
+        type: 2}
+      propertyPath: m_Color.b
+      value: 0.48627454
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 33f1f770a10c84546affa4fc6734f200, type: 2}

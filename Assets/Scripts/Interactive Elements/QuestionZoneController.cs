@@ -2,10 +2,9 @@
 using System.Collections;
 using DG.Tweening;
 
-public class QuestionZoneController : BaseInteractiveElement {
-
-    [SerializeField] int questionId;
-    [SerializeField] int coinsAfterRightAnswer;
+public class QuestionZoneController : ConsumableController {
+    
+    public int coinsAfterRightAnswer;
     public ConsumableController coinControllerPrefab;
     CharacterControl character;
     bool questionDisplayed = false;
@@ -19,7 +18,7 @@ public class QuestionZoneController : BaseInteractiveElement {
             return;
         }
 
-        GameController.Instance.DisplayQuestion(questionId, OnQuestionAnswered);
+        GameController.Instance.DisplayQuestion(id, OnQuestionAnswered);
         questionDisplayed = true;
     }
 
@@ -44,7 +43,7 @@ public class QuestionZoneController : BaseInteractiveElement {
         {
             character.UpdateEnergy(GameController.Instance.questionsDB.EnergyAfterRightAnswer);
             SpawnCoinAndMoveToUI();
-            StartCoroutine(MoveQuestionToUI(character));            
+			StartCoroutine(IncrementConsumableCountCoroutine(character));            
         }
         else
         {
@@ -62,27 +61,5 @@ public class QuestionZoneController : BaseInteractiveElement {
 
         coinController.amount = coinsAfterRightAnswer;
         coinController.type = InGameItemsDBScriptableObject.ItemType.Coin;                
-    }
-
-    IEnumerator MoveQuestionToUI(CharacterControl character)
-    {
-        Vector3 worldPosition = transform.position;
-        Vector3 screenPosition = Utils.WorldToCanvasPosition(worldPosition, GameController.Instance.WorldCamera, GameController.Instance.UIMainRectTransform);
-        screenPosition.z = 0;
-
-        transform.SetParent(GameController.Instance.UIMainRectTransform, true);
-        gameObject.layer = LayerMask.NameToLayer("UI");
-        transform.localPosition = screenPosition;
-
-        Vector3 endPosition = GameController.Instance.QuestionsIconContainer.position;
-
-        var tweener = transform.DOMove(endPosition, GameController.Instance.consumablesMoveToUITime);
-        tweener.SetEase(GameController.Instance.consumableMovEaseType);
-        yield return tweener.WaitForCompletion();
-        yield return null;
-
-        GameController.Instance.UpdateConsumable(InGameItemsDBScriptableObject.ItemType.Question, this.questionId, 1);        
-        base.OnCharacterEnter(character);
-        yield break;
-    }    
+    }		   
 }

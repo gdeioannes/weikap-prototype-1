@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
-public class GameProgress : MonoBehaviour
+[Prefab()]
+public class GameProgress : Singleton<GameProgress>
 {
     public enum LevelStatus
     {
@@ -10,8 +12,6 @@ public class GameProgress : MonoBehaviour
         Win,
         Lose
     }
-
-    public static GameProgress Instance { get; private set; }
 
     [System.Serializable]
     public class LevelData
@@ -40,38 +40,45 @@ public class GameProgress : MonoBehaviour
 
         public LevelData[] levelsData;
 
-        public ulong totalGameTime;
-        public long finishedStages;
-        public long lostStages;
+        public long totalGameTime;
 
-        public QuestionData[] questionsData;
-        public long rightAnsweredQuestions;
-        public long wrongAnsweredQuestions;
+        public QuestionData[] questionsData;        
         public long coinsCollected;
     }
 
     GameData gameData;
 
+	[SerializeField] LevelsDBScriptableObject levelsDB;
+
     public long CoinsCollected { get { return gameData.coinsCollected; } }
     public long CoinsAvailable { get { return gameData.coinsAvailable; } }
+	public long QuestionsAnswered { get { return gameData.questionsData != null ? gameData.questionsData.Sum(w=>w.rightAnswers) : 0 ; } }
+	public long TotalGameTime { get { return gameData.totalGameTime; } }
+
     public HashSet<int> SamplesCollected { get; private set; }
     public HashSet<int> ToolsUnlocked { get; private set; }
     public Dictionary<int, LevelData> LevelsData { get; private set; }
+	public LevelsDBScriptableObject.Level[] Levels { get { return levelsDB.levels; } }
 
     public System.Action OnSamplesCollectionUpdated = delegate { };
     public System.Action<long> OnCoinsAmountUpdated = delegate { };
 
-    void OnAwake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-    }
+	void Awake()
+	{
+		this.GetValuesFromPlayerPrefs ();
+		StartCoroutine (UpdateGameTime ());
+	}
 
-    public static void Instantiate()
-    {
-        GameObject newObject = new GameObject("GamerProgress");
-        Instance = newObject.AddComponent<GameProgress>();
-        Instance.GetValuesFromPlayerPrefs();
-    }
+	IEnumerator UpdateGameTime()
+	{
+		var yieldInstruction = new WaitForSeconds (1);
+
+		while (true) 
+		{
+			gameData.totalGameTime += 1;
+			yield return yieldInstruction;
+		}
+	}
 
     void GetValuesFromPlayerPrefs()
     {
@@ -175,20 +182,10 @@ public class GameProgress : MonoBehaviour
         {
             LevelsData[levelId].status = status;
         }
-
-        if (status == LevelStatus.Win) { gameData.finishedStages++; }
-        else { gameData.lostStages++; }
-    }
-
-    public void UpdateQuestionStats(bool rightAnswer)
-    {
-        if (rightAnswer) { this.gameData.rightAnsweredQuestions++; }
-        else { this.gameData.wrongAnsweredQuestions++; }
     }
 
     void OnDestroy()
     {
         SaveValuesToPlayerPrefs();
-        Instance = null;
     }
 }

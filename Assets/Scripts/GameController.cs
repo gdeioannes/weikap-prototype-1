@@ -40,7 +40,7 @@ public class GameController : MonoBehaviour {
         Instance = this;
         cameraFollower.enabled = false;
         energySlider.value = 100;
-        GameProgress.Instantiate();
+		var gameProgressInstance = GameProgress.Instance; // creating game progress instance
     }
 
     void Start()

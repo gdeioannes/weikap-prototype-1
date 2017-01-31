@@ -32,6 +32,9 @@ public class ConsumableController : BaseInteractiveElement
             case InGameItemsDBScriptableObject.ItemType.Sample:
                 endPosition = GameController.Instance.GetSampleIconContainer(id).position;
                 break;
+			case InGameItemsDBScriptableObject.ItemType.Question:
+				endPosition = GameController.Instance.QuestionsIconContainer.position;
+				break;
         }
 
         var tweener = transform.DOMove(endPosition, GameController.Instance.consumablesMoveToUITime);

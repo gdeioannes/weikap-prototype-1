@@ -54,7 +54,6 @@ public class QuestionsPopUpController : MonoBehaviour {
         {
             onAnswerCb(result);
         }
-        GameProgress.Instance.UpdateQuestionStats(result);
         answerPopUpController.Show(result);
     }
 }

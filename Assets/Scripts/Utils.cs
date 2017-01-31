@@ -62,5 +62,5 @@ public static class Utils {
         temp.y -= canvas.sizeDelta.y * canvas.pivot.y;
 
         return temp;
-    }
+    }		
 }

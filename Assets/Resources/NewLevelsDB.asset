@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc82c39bf735e4586986fb6327f538a7, type: 3}
+  m_Name: NewLevelsDB
+  m_EditorClassIdentifier: 
+  levels:
+  - samples: 3
+    questions: 1
+    coins: 5
+    scene: {fileID: 102900000, guid: 6e2c8b1d1ee7742b781fe731eec67ea1, type: 3}
