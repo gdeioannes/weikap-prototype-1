@@ -54,7 +54,7 @@ public class ProgressValueUpdater : MonoBehaviour {
 			textToReplace.text = GameProgress.Instance.LevelsData.Values.Sum(s=>s.maxRightAnsweredQuestions).ToString();
 			break;
 		case Type.TotalWrongAnswers:
-			textToReplace.text =  (GameProgress.Instance.Levels.Sum(s=>s.questions) - GameProgress.Instance.LevelsData.Sum(s=>s.Value.maxRightAnsweredQuestions)).ToString();
+			textToReplace.text =  (GameProgress.Instance.Levels.Values.Sum(s=>s.questions) - GameProgress.Instance.LevelsData.Sum(s=>s.Value.maxRightAnsweredQuestions)).ToString();
 			break;
 		case Type.TimePlayed:
 			textToReplace.text = System.TimeSpan.FromSeconds (GameProgress.Instance.TotalGameTime).ToString ();

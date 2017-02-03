@@ -16,3 +16,5 @@ MonoBehaviour:
     questions: 1
     coins: 5
     scene: {fileID: 102900000, guid: 6e2c8b1d1ee7742b781fe731eec67ea1, type: 3}
+    levelImage: {fileID: 1193566011746856, guid: 7d39fb517951e470fa6a5a96fa42c39e,
+      type: 2}

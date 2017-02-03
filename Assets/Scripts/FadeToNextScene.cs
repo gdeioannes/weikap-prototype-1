@@ -29,12 +29,13 @@ public class FadeToNextScene : MonoBehaviour {
     {
         state = State.Waiting;
         yield return new WaitForSeconds(secondsToNextScene);
-        ToNextScene();
+		ToNextScene(this.nextSceneName);
     }
 
-    public void ToNextScene()
+	public void ToNextScene(string sceneName)
     {
-        if (state == State.Waiting)
+		this.nextSceneName = sceneName;
+		if (state == State.Waiting)
         {
             StopAllCoroutines(); // stop waiting coroutine
         }
@@ -47,14 +48,14 @@ public class FadeToNextScene : MonoBehaviour {
 
     IEnumerator TransitionToNextScene()
     {
-        // begin loading next scene
+		var tweener = canvasGroup.DOFade(0, transitionSeconds);
+		yield return tweener.WaitForCompletion();
+
+		// begin loading next scene
         var op = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(nextSceneName);
         op.allowSceneActivation = false;
 
-        var tweener = canvasGroup.DOFade(0, transitionSeconds);
-        yield return tweener.WaitForCompletion();
         yield return new WaitForSeconds(0.1f); // extra wait time
-
 
         op.allowSceneActivation = true;
     }

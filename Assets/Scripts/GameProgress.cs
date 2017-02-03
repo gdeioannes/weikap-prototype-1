@@ -58,7 +58,7 @@ public class GameProgress : Singleton<GameProgress>
     public HashSet<int> SamplesCollected { get; private set; }
     public HashSet<int> ToolsUnlocked { get; private set; }
     public Dictionary<int, LevelData> LevelsData { get; private set; }
-	public LevelsDBScriptableObject.Level[] Levels { get { return levelsDB.levels; } }
+	public Dictionary<int, LevelsDBScriptableObject.Level> Levels { get; private set; }
 
     public System.Action OnSamplesCollectionUpdated = delegate { };
     public System.Action<long> OnCoinsAmountUpdated = delegate { };
@@ -66,6 +66,13 @@ public class GameProgress : Singleton<GameProgress>
 	void Awake()
 	{
 		this.GetValuesFromPlayerPrefs ();
+
+		Levels = new Dictionary<int, LevelsDBScriptableObject.Level> ();
+		for (int i = 0, max = levelsDB.levels.Length; i < max; ++i) 
+		{
+			Levels [i] = levelsDB.levels [i];
+		}
+
 		StartCoroutine (UpdateGameTime ());
 	}
 

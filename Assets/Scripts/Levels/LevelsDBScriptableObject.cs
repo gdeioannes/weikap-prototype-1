@@ -12,6 +12,7 @@ public class LevelsDBScriptableObject : ScriptableObject
 		public int questions;
 		public int coins;
 		public Object scene;
+		public GameObject levelImage;
 	}
 
 	public Level[] levels;
