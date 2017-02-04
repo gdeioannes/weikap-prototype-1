@@ -12,16 +12,14 @@ public class FadeToNextScene : MonoBehaviour {
         DoingTransition
     }
 
-    [SerializeField] string nextSceneName;
+    [SerializeField] [SceneListAttribute] string nextSceneName;
     [SerializeField] bool useTimer;
     [Range(0.1f,10f)] [SerializeField] float secondsToNextScene;
-    [SerializeField] CanvasGroup canvasGroup;
     [Range(0.1f, 5f)] [SerializeField] float transitionSeconds;
     [SerializeField] State state;
 
     void Start()
     {
-        if (canvasGroup == null) { canvasGroup = this.GetComponentInChildren<CanvasGroup>(); }
         if (useTimer) { StartCoroutine(WaitAndGoToNextScene()); }
     }
 
@@ -31,6 +29,11 @@ public class FadeToNextScene : MonoBehaviour {
         yield return new WaitForSeconds(secondsToNextScene);
 		ToNextScene(this.nextSceneName);
     }
+
+	public void ToNextScene()
+	{
+		ToNextScene(this.nextSceneName);
+	}
 
 	public void ToNextScene(string sceneName)
     {
@@ -43,20 +46,6 @@ public class FadeToNextScene : MonoBehaviour {
         if (state == State.DoingTransition) { return; /*already doing transition */ }
 
         state = State.DoingTransition;
-        StartCoroutine(TransitionToNextScene());
-    }
-
-    IEnumerator TransitionToNextScene()
-    {
-		var tweener = canvasGroup.DOFade(0, transitionSeconds);
-		yield return tweener.WaitForCompletion();
-
-		// begin loading next scene
-        var op = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(nextSceneName);
-        op.allowSceneActivation = false;
-
-        yield return new WaitForSeconds(0.1f); // extra wait time
-
-        op.allowSceneActivation = true;
+		FadeTransitionManager.Instance.ToNextScene(sceneName, transitionSeconds);
     }
 }

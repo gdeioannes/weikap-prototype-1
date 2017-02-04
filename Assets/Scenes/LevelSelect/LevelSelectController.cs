@@ -26,7 +26,7 @@ public class LevelSelectController : MonoBehaviour
 	void UpdateLevelImage()
 	{
 		levelImageContainer.DestroyChildren (); // destroy all children
-		GameObject newLevelImage = Object.Instantiate<GameObject>(GameProgress.Instance.Levels[this.levelId].levelImage);
+		GameObject newLevelImage = Object.Instantiate<GameObject>(PlayerData.Instance.Levels[this.levelId].levelImage);
 		newLevelImage.transform.SetParent (levelImageContainer, false);
 	}
 

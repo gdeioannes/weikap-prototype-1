@@ -10,6 +10,6 @@ public class EndPoint : BaseInteractiveElement
 
     protected override void OnCharacterEnter(CharacterControl character)
     {
-        GameController.Instance.UpdateLevelProgress(GameProgress.LevelStatus.Win);        
+		GameController.Instance.UpdateLevelProgress(PlayerData.LevelStatus.Win);        
     }
 }

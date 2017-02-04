@@ -35,8 +35,8 @@ public class SamplesPopUpController : MonoBehaviour {
     {
         if (!handlersAdded)
         {
-            GameProgress.Instance.OnCoinsAmountUpdated += UpdateCoinsAvailable;
-            this.coinsAmount.text = GameProgress.Instance.CoinsAvailable.ToString();
+			PlayerData.Instance.OnCoinsAmountUpdated += UpdateCoinsAvailable;
+			this.coinsAmount.text = PlayerData.Instance.CoinsAvailable.ToString();
             handlersAdded = true;
         }
 
@@ -66,7 +66,7 @@ public class SamplesPopUpController : MonoBehaviour {
     void OnSelect(int sampleId)
     {
         var selectedSample = GameController.Instance.SamplesDB[sampleId];
-        bool collectedStatus = GameProgress.Instance.SamplesCollected.Contains(sampleId);
+		bool collectedStatus = PlayerData.Instance.SamplesCollected.Contains(sampleId);
         selectedSampleName.text = selectedSample.Name;
         selectedSampleDesc.text = selectedSample.Description;
         collectedSelectedSampleImage.texture = selectedSample.Image;
@@ -80,9 +80,9 @@ public class SamplesPopUpController : MonoBehaviour {
     {
         if (handlersAdded)
         {
-            if (GameProgress.Instance != null)
+			if (PlayerData.Instance != null)
             {
-                GameProgress.Instance.OnCoinsAmountUpdated -= UpdateCoinsAvailable;
+				PlayerData.Instance.OnCoinsAmountUpdated -= UpdateCoinsAvailable;
             }
         }
     }

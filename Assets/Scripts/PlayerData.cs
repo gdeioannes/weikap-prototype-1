@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 [Prefab()]
-public class GameProgress : Singleton<GameProgress>
+public class PlayerData : Singleton<PlayerData>
 {
     public enum LevelStatus
     {
@@ -175,7 +175,7 @@ public class GameProgress : Singleton<GameProgress>
         OnCoinsAmountUpdated(gameData.coinsAvailable);
     }
 
-    public void UpdateLevelProgress(int levelId, Dictionary<InGameItemsDBScriptableObject.ItemType, int> consumablesCollected, GameProgress.LevelStatus status)
+	public void UpdateLevelProgress(int levelId, Dictionary<InGameItemsDBScriptableObject.ItemType, int> consumablesCollected, PlayerData.LevelStatus status)
     {
         if (!LevelsData.ContainsKey(levelId))
         {

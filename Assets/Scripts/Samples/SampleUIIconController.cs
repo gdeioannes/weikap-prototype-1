@@ -16,13 +16,13 @@ public class SampleUIIconController : MonoBehaviour {
     {
         this.sampleId = sampleId;
         sample = GameController.Instance.SamplesDB[sampleId];
-        collectedStatus = GameProgress.Instance.SamplesCollected.Contains(sampleId);
+		collectedStatus = PlayerData.Instance.SamplesCollected.Contains(sampleId);
 
         UpdateUI();
 
         if (!handlerAdded)
         {
-            GameProgress.Instance.OnSamplesCollectionUpdated += OnSamplesCollectionUpdatedHandler;            
+			PlayerData.Instance.OnSamplesCollectionUpdated += OnSamplesCollectionUpdatedHandler;            
             handlerAdded = true;
         }        
     }
@@ -38,7 +38,7 @@ public class SampleUIIconController : MonoBehaviour {
 
     void OnSamplesCollectionUpdatedHandler()
     {
-        collectedStatus = GameProgress.Instance.SamplesCollected.Contains(sampleId);
+		collectedStatus = PlayerData.Instance.SamplesCollected.Contains(sampleId);
         icon.enabled = collectedStatus;
         nonCollectedIcon.enabled = !collectedStatus;
     }    
@@ -52,9 +52,9 @@ public class SampleUIIconController : MonoBehaviour {
     {
         if (handlerAdded)
         {
-            if (GameProgress.Instance != null)
+			if (PlayerData.Instance != null)
             {
-                GameProgress.Instance.OnSamplesCollectionUpdated -= OnSamplesCollectionUpdatedHandler;
+				PlayerData.Instance.OnSamplesCollectionUpdated -= OnSamplesCollectionUpdatedHandler;
             }
         }        
     }

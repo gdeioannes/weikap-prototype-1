@@ -10,4 +10,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LevelSelect/LevelSelect.unity
   - enabled: 1
-    path: Assets/Scenes/Levels/GameScene.unity
+    path: Assets/Scenes/Levels/01/GameScene.unity
+  - enabled: 1
+    path: Assets/Scenes/OptionsPopUp/OptionsPopUpScene.unity
+  - enabled: 1
+    path: Assets/Scenes/Credits/CreditsScene.unity

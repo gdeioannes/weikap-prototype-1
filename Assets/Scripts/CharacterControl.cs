@@ -137,6 +137,6 @@ public class CharacterControl : MonoBehaviour {
             }
         }
 
-        GameController.Instance.UpdateLevelProgress(GameProgress.LevelStatus.Lose);        
+		GameController.Instance.UpdateLevelProgress(PlayerData.LevelStatus.Lose);        
     }
 }

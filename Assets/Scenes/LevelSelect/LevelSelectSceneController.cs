@@ -12,7 +12,7 @@ public class LevelSelectSceneController : MonoBehaviour {
 	{
 		levelSelectListContainer.DestroyChildren (); // destroy all container children
 
-		var enumerator = GameProgress.Instance.Levels.Values.GetEnumerator ();
+		var enumerator = PlayerData.Instance.Levels.Values.GetEnumerator ();
 		int levelIndex = 0;
 		while (enumerator.MoveNext ()) 
 		{
@@ -26,7 +26,7 @@ public class LevelSelectSceneController : MonoBehaviour {
 
 	void OnLevelSelect(int levelId)
 	{
-		string levelName = GameProgress.Instance.Levels [levelId].scene.name;
+		string levelName = PlayerData.Instance.Levels [levelId].scene.name;
 		toNextSceneController.ToNextScene (levelName);
 	}
 }

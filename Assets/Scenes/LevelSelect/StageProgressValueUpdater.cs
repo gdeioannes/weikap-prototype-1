@@ -37,8 +37,8 @@ public class StageProgressValueUpdater : MonoBehaviour
 	public void UpdateValue(int levelId)
 	{		
 		this.levelId = levelId;
-		var levelData = GameProgress.Instance.LevelsData.TryGetValue (this.levelId);
-		var levelInfo = GameProgress.Instance.Levels.TryGetValue (this.levelId);
+		var levelData = PlayerData.Instance.LevelsData.TryGetValue (this.levelId);
+		var levelInfo = PlayerData.Instance.Levels.TryGetValue (this.levelId);
 
 		switch (type) 
 		{

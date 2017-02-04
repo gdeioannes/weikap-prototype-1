@@ -21,14 +21,14 @@ public class LevelMaxValueUpdater : MonoBehaviour {
 		switch (type) 
 		{
 		case Type.MaxCoins:
-			textToReplace.text = GameProgress.Instance.Levels.Values.Sum(s=>s.questions).ToString();
-			break;
+				textToReplace.text = PlayerData.Instance.Levels.Values.Sum(s=>s.questions).ToString();
+				break;
 		case Type.MaxSamples:
-			textToReplace.text = GameProgress.Instance.Levels.Values.Sum(s=>s.samples).ToString();
-			break;
+				textToReplace.text = PlayerData.Instance.Levels.Values.Sum(s=>s.samples).ToString();
+				break;
 		case Type.MaxQuestions:
-			textToReplace.text = GameProgress.Instance.Levels.Values.Sum(s=>s.questions).ToString ();
-			break;		
+				textToReplace.text = PlayerData.Instance.Levels.Values.Sum(s=>s.questions).ToString ();
+				break;		
 		}
 	}
 }

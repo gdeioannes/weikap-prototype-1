@@ -1029,6 +1029,7 @@ GameObject:
   - component: {fileID: 752266715}
   - component: {fileID: 752266714}
   - component: {fileID: 752266713}
+  - component: {fileID: 752266716}
   m_Layer: 5
   m_Name: Options Button
   m_TagString: Untagged
@@ -1093,7 +1094,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 752266714}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 752266716}
+        m_MethodName: DoOpen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &752266714
@@ -1129,6 +1141,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 752266711}
+--- !u!114 &752266716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 752266711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a90a935b76a8402190e23260efb277a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  popUpName: OptionsPopUpScene
 --- !u!1 &839954148
 GameObject:
   m_ObjectHideFlags: 0
@@ -2189,7 +2213,7 @@ Prefab:
     - target: {fileID: 224598720358371522, guid: 908ef56fbdd304fb0813b6188be269cc,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 4.6511626
+      value: 5.079365
       objectReference: {fileID: 0}
     - target: {fileID: 224598720358371522, guid: 908ef56fbdd304fb0813b6188be269cc,
         type: 2}
@@ -2199,7 +2223,7 @@ Prefab:
     - target: {fileID: 224184132358042208, guid: 908ef56fbdd304fb0813b6188be269cc,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 4.6511626
+      value: 5.079365
       objectReference: {fileID: 0}
     - target: {fileID: 224184132358042208, guid: 908ef56fbdd304fb0813b6188be269cc,
         type: 2}
@@ -2209,7 +2233,7 @@ Prefab:
     - target: {fileID: 224379547648800678, guid: 908ef56fbdd304fb0813b6188be269cc,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 4.6511626
+      value: 5.079365
       objectReference: {fileID: 0}
     - target: {fileID: 224379547648800678, guid: 908ef56fbdd304fb0813b6188be269cc,
         type: 2}
@@ -2394,7 +2418,6 @@ MonoBehaviour:
   nextSceneName: 
   useTimer: 0
   secondsToNextScene: 0
-  canvasGroup: {fileID: 1754641813}
   transitionSeconds: 1
   state: 0
 --- !u!1 &1876861950

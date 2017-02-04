@@ -40,7 +40,7 @@ public class GameController : MonoBehaviour {
         Instance = this;
         cameraFollower.enabled = false;
         energySlider.value = 100;
-		var gameProgressInstance = GameProgress.Instance; // creating game progress instance
+		var gameProgressInstance = PlayerData.Instance; // creating game progress instance
     }
 
     void Start()
@@ -76,11 +76,11 @@ public class GameController : MonoBehaviour {
 
         if (type == InGameItemsDBScriptableObject.ItemType.Sample)
         {
-            GameProgress.Instance.UpdateSamplesCollected(index);
+			PlayerData.Instance.UpdateSamplesCollected(index);
         }
         if (type == InGameItemsDBScriptableObject.ItemType.Coin)
         {
-            GameProgress.Instance.UpdateCoinsCollected((long)amount);
+			PlayerData.Instance.UpdateCoinsCollected((long)amount);
         }
 
         UpdateConsumablesUI(type, levelProgress.consumables[type]);
@@ -124,13 +124,13 @@ public class GameController : MonoBehaviour {
         return samplesUIController.GetSampleIconTransform(sampleId);
     }
 
-    public void UpdateLevelProgress(GameProgress.LevelStatus status)
+    public void UpdateLevelProgress(PlayerData.LevelStatus status)
     {
         levelProgress.UpdateGameProgress(status);
         switch (status)
         {
-            case GameProgress.LevelStatus.Win:
-            case GameProgress.LevelStatus.Lose:
+			case PlayerData.LevelStatus.Win:
+			case PlayerData.LevelStatus.Lose:
                 // Restart current level
                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
                 break;
