@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour {
     [SerializeField] SamplesInLevelController samplesUIController;
     [SerializeField] SamplesPopUpController samplesPopUpController;
     [SerializeField] QuestionsPopUpController questionController;
+	[SerializeField] [SceneListAttribute] string stageEndedScene;
 
     public Transform CoinsIconContainer;
     public Transform QuestionsIconContainer;
@@ -131,8 +132,7 @@ public class GameController : MonoBehaviour {
         {
 			case PlayerData.LevelStatus.Win:
 			case PlayerData.LevelStatus.Lose:
-                // Restart current level
-                UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+				UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(stageEndedScene, UnityEngine.SceneManagement.LoadSceneMode.Additive);
                 break;
         }
     }

@@ -7,6 +7,9 @@ public class StageProgressValueUpdater : MonoBehaviour
 {
 	public enum Type
 	{
+		CurrentCoinsCollected,
+		CurrentSamplesCollected,
+		CurrentRightAnswredQuestions,
 		MaxCoinsCollected,
 		MaxSamplesCollected,
 		MaxRightAnsweredQuestions,
@@ -15,7 +18,7 @@ public class StageProgressValueUpdater : MonoBehaviour
 		QuestionsInLevel
 	}
 
-	[SerializeField] int levelId;
+	[SerializeField] int levelId = -1;
 	[SerializeField] Type type;
 	[SerializeField ]bool autoUpdate = true;
 
@@ -28,7 +31,7 @@ public class StageProgressValueUpdater : MonoBehaviour
 
 	void Start()
 	{		
-		if (autoUpdate) 
+		if (autoUpdate && levelId >=0 ) 
 		{
 			UpdateValue (this.levelId);
 		}
@@ -42,25 +45,33 @@ public class StageProgressValueUpdater : MonoBehaviour
 
 		switch (type) 
 		{
-		case Type.MaxCoinsCollected:
-			
-			text.text = levelData != null ? levelData.maxCoinsCollected.ToString () : "0";
-			break;
-		case Type.MaxSamplesCollected:
-			text.text = levelData != null ? levelData.maxSamplesCollected.ToString () : "0";
-			break;
-		case Type.MaxRightAnsweredQuestions:
-			text.text = levelData != null ? levelData.maxRightAnsweredQuestions.ToString () : "0";
-			break;
-		case Type.CoinsInLevel:
-			text.text = levelInfo != null ? levelInfo.coins.ToString() : "0";
-			break;
-		case Type.SamplesInLevel: 
-			text.text = levelInfo != null ? levelInfo.samples.ToString() : "0";
-			break;
-		case Type.QuestionsInLevel:
-			text.text = levelInfo != null ? levelInfo.questions.ToString() : "0";
-			break;
+			case Type.CurrentCoinsCollected:
+				text.text = GameController.Instance.levelProgress.consumables.TryGetValue(InGameItemsDBScriptableObject.ItemType.Coin).ToString();
+				break;
+			case Type.CurrentSamplesCollected:
+				text.text = GameController.Instance.levelProgress.consumables.TryGetValue(InGameItemsDBScriptableObject.ItemType.Sample).ToString();
+				break;
+			case Type.CurrentRightAnswredQuestions:
+				text.text = GameController.Instance.levelProgress.consumables.TryGetValue(InGameItemsDBScriptableObject.ItemType.Question).ToString();
+				break;
+			case Type.MaxCoinsCollected:
+				text.text = levelData != null ? levelData.maxCoinsCollected.ToString () : "0";
+				break;
+			case Type.MaxSamplesCollected:
+				text.text = levelData != null ? levelData.maxSamplesCollected.ToString () : "0";
+				break;
+			case Type.MaxRightAnsweredQuestions:
+				text.text = levelData != null ? levelData.maxRightAnsweredQuestions.ToString () : "0";
+				break;
+			case Type.CoinsInLevel:
+				text.text = levelInfo != null ? levelInfo.coins.ToString() : "0";
+				break;
+			case Type.SamplesInLevel: 
+				text.text = levelInfo != null ? levelInfo.samples.ToString() : "0";
+				break;
+			case Type.QuestionsInLevel:
+				text.text = levelInfo != null ? levelInfo.questions.ToString() : "0";
+				break;
 		}
 	}
 }

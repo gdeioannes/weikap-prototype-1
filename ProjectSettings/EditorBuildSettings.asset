@@ -15,3 +15,5 @@ EditorBuildSettings:
     path: Assets/Scenes/OptionsPopUp/OptionsPopUpScene.unity
   - enabled: 1
     path: Assets/Scenes/Credits/CreditsScene.unity
+  - enabled: 1
+    path: Assets/Scenes/StageEndedPopUp/StageEndedPopUpScene.unity

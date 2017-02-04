@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelId: 0
-  type: 5
+  type: 7
   autoUpdate: 0
 --- !u!114 &114074253510404092
 MonoBehaviour:
@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelId: 0
-  type: 0
+  type: 3
   autoUpdate: 0
 --- !u!114 &114165290769727586
 MonoBehaviour:
@@ -432,7 +432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelId: 0
-  type: 4
+  type: 8
   autoUpdate: 0
 --- !u!114 &114225464386771142
 MonoBehaviour:
@@ -446,7 +446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelId: 0
-  type: 3
+  type: 6
   autoUpdate: 0
 --- !u!114 &114267295567800106
 MonoBehaviour:
@@ -524,7 +524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelId: 0
-  type: 2
+  type: 4
   autoUpdate: 0
 --- !u!114 &114416257581964774
 MonoBehaviour:
@@ -641,7 +641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelId: 0
-  type: 1
+  type: 5
   autoUpdate: 0
 --- !u!114 &114528246737165186
 MonoBehaviour:

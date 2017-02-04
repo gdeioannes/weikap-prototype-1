@@ -4284,7 +4284,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 47.55, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &313922290
@@ -11299,6 +11299,7 @@ MonoBehaviour:
   samplesUIController: {fileID: 92839356}
   samplesPopUpController: {fileID: 1335466173}
   questionController: {fileID: 1448136373}
+  stageEndedScene: StageEndedPopUpScene
   CoinsIconContainer: {fileID: 1767181157}
   QuestionsIconContainer: {fileID: 977737930}
   WorldCamera: {fileID: 1262749724}

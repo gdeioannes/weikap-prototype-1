@@ -2210,36 +2210,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 224598720358371522, guid: 908ef56fbdd304fb0813b6188be269cc,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 5.079365
-      objectReference: {fileID: 0}
-    - target: {fileID: 224598720358371522, guid: 908ef56fbdd304fb0813b6188be269cc,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224184132358042208, guid: 908ef56fbdd304fb0813b6188be269cc,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 5.079365
-      objectReference: {fileID: 0}
-    - target: {fileID: 224184132358042208, guid: 908ef56fbdd304fb0813b6188be269cc,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224379547648800678, guid: 908ef56fbdd304fb0813b6188be269cc,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 5.079365
-      objectReference: {fileID: 0}
-    - target: {fileID: 224379547648800678, guid: 908ef56fbdd304fb0813b6188be269cc,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 908ef56fbdd304fb0813b6188be269cc, type: 2}
   m_IsPrefabParent: 0
@@ -2415,7 +2385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a1dbac29c1e464597f0f91791bd3e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextSceneName: 
+  nextSceneName: MainUI
   useTimer: 0
   secondsToNextScene: 0
   transitionSeconds: 1

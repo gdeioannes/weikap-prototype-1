@@ -46,6 +46,7 @@ public class FadeToNextScene : MonoBehaviour {
         if (state == State.DoingTransition) { return; /*already doing transition */ }
 
         state = State.DoingTransition;
+
 		FadeTransitionManager.Instance.ToNextScene(sceneName, transitionSeconds);
     }
 }
