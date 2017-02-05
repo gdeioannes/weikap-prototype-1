@@ -24,11 +24,6 @@ public class StageProgressValueUpdater : MonoBehaviour
 
 	UnityEngine.UI.Text text;
 
-	void Awake()
-	{
-		text = GetComponent<UnityEngine.UI.Text> ();
-	}
-
 	void Start()
 	{		
 		if (autoUpdate && levelId >=0 ) 
@@ -39,6 +34,11 @@ public class StageProgressValueUpdater : MonoBehaviour
 
 	public void UpdateValue(int levelId)
 	{		
+		if(text == null)
+		{
+			text = GetComponent<UnityEngine.UI.Text> ();
+		}
+
 		this.levelId = levelId;
 		var levelData = PlayerData.Instance.LevelsData.TryGetValue (this.levelId);
 		var levelInfo = PlayerData.Instance.Levels.TryGetValue (this.levelId);

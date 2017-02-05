@@ -29,39 +29,39 @@ public class ProgressValueUpdater : MonoBehaviour {
 
 		switch (type) 
 		{
-		case Type.CoinsCurrent:
+			case Type.CoinsCurrent:
 				textToReplace.text = PlayerData.Instance.CoinsAvailable.ToString();
 				break;
-		case Type.SamplesCurrent:
+			case Type.SamplesCurrent:
 				textToReplace.text = PlayerData.Instance.SamplesCollected.Count.ToString();
 				break;
-		case Type.QuestionsCurrent:
-				textToReplace.text = PlayerData.Instance.QuestionsAnswered.ToString ();
+			case Type.QuestionsCurrent:
+				PlayerData.Instance.LevelsData.Values.Sum(w => w.maxRightAnsweredQuestions).ToString();
 				break;
-		case Type.ToolsCurrent:
+			case Type.ToolsCurrent:
 				textToReplace.text = PlayerData.Instance.ToolsUnlocked.Count.ToString();
 				break;
-		case Type.CoinsCollected:
+			case Type.CoinsCollected:
 				textToReplace.text = PlayerData.Instance.CoinsCollected.ToString();
 				break;
-		case Type.LevelsCompleted:
+			case Type.LevelsCompleted:
 				textToReplace.text = PlayerData.Instance.LevelsData.Count(s=>s.Value.status == PlayerData.LevelStatus.Win).ToString();
 				break;
-		case Type.LevelsLost:
+			case Type.LevelsLost:
 				textToReplace.text = PlayerData.Instance.LevelsData.Count(s=>s.Value.status == PlayerData.LevelStatus.Lose).ToString();
 				break;
-		case Type.TotalRightAnswers:
+			case Type.TotalRightAnswers:
 				textToReplace.text = PlayerData.Instance.LevelsData.Values.Sum(s=>s.maxRightAnsweredQuestions).ToString();
-			break;
-		case Type.TotalWrongAnswers:
+				break;
+			case Type.TotalWrongAnswers:
 				textToReplace.text =  (PlayerData.Instance.Levels.Values.Sum(s=>s.questions) - PlayerData.Instance.LevelsData.Sum(s=>s.Value.maxRightAnsweredQuestions)).ToString();
 				break;
-		case Type.TimePlayed:
+			case Type.TimePlayed:
 				textToReplace.text = System.TimeSpan.FromSeconds (PlayerData.Instance.TotalGameTime).ToString ();
 				break;
-		default:
-			textToReplace.text = "?";
-			break;
+			default:
+				textToReplace.text = "?";
+				break;
 		}
 	}
 }

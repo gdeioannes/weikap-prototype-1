@@ -24,14 +24,6 @@ public class PlayerData : Singleton<PlayerData>
     }
 
     [System.Serializable]
-    public class QuestionData
-    {
-        public int questionId;
-        public int rightAnswers;
-        public int wrongAnsers;
-    }
-
-    [System.Serializable]
     public struct GameData
     {
         public long coinsAvailable;
@@ -42,7 +34,6 @@ public class PlayerData : Singleton<PlayerData>
 
         public long totalGameTime;
 
-        public QuestionData[] questionsData;        
         public long coinsCollected;
     }
 
@@ -52,7 +43,6 @@ public class PlayerData : Singleton<PlayerData>
 
     public long CoinsCollected { get { return gameData.coinsCollected; } }
     public long CoinsAvailable { get { return gameData.coinsAvailable; } }
-	public long QuestionsAnswered { get { return gameData.questionsData != null ? gameData.questionsData.Sum(w=>w.rightAnswers) : 0 ; } }
 	public long TotalGameTime { get { return gameData.totalGameTime; } }
 
     public HashSet<int> SamplesCollected { get; private set; }
@@ -61,7 +51,8 @@ public class PlayerData : Singleton<PlayerData>
 	public Dictionary<int, LevelsDBScriptableObject.Level> Levels { get; private set; }
 
     public System.Action OnSamplesCollectionUpdated = delegate { };
-    public System.Action<long> OnCoinsAmountUpdated = delegate { };
+	public System.Action OnToolsUnlockUpdated = delegate { };
+	public System.Action<long> OnCoinsAmountUpdated = delegate { };
 
 	void Awake()
 	{
@@ -123,7 +114,7 @@ public class PlayerData : Singleton<PlayerData>
 
     void SaveValuesToPlayerPrefs()
     {
-        if (SamplesCollected.Count > 0)
+		if (SamplesCollected != null && SamplesCollected.Count > 0)
         {
             gameData.samplesCollected = new int[SamplesCollected.Count];
             var samplesEnumerator = SamplesCollected.GetEnumerator();
@@ -135,7 +126,7 @@ public class PlayerData : Singleton<PlayerData>
             }
         }
 
-        if (ToolsUnlocked.Count > 0)
+		if ( ToolsUnlocked != null && ToolsUnlocked.Count > 0)
         {
             gameData.toolsUnlocked = new int[ToolsUnlocked.Count];
             var toolsEnumerator = ToolsUnlocked.GetEnumerator();
@@ -147,7 +138,7 @@ public class PlayerData : Singleton<PlayerData>
             }
         }
 
-        if (LevelsData.Count > 0)
+		if (LevelsData != null && LevelsData.Count > 0)
         {
             gameData.levelsData = new LevelData[LevelsData.Count];
             var levelsEnumerator = LevelsData.GetEnumerator();
@@ -167,6 +158,22 @@ public class PlayerData : Singleton<PlayerData>
         SamplesCollected.Add(newSampleId);
         OnSamplesCollectionUpdated();
     }
+
+	public bool BuyTool(int toolId)
+	{
+		if (ToolsUnlocked.Contains(toolId)) { return false; } // do nothing, already purchased
+		if (toolId < 0 || toolId >= GameController.Instance.ToolsDB.Length){ return false; } // invalid tool id
+		var toolData = GameController.Instance.ToolsDB[toolId];
+		if(gameData.coinsAvailable < toolData.unlockCost)
+		{
+			return false; // unable to buy, not enough coins
+		}
+
+		UpdateCoinsCollected(-toolData.unlockCost);
+		ToolsUnlocked.Add(toolId);
+		OnToolsUnlockUpdated();
+		return true;
+	}
 
     public void UpdateCoinsCollected(long coins)
     {

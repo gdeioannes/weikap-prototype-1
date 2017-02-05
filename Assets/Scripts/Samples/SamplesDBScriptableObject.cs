@@ -14,7 +14,28 @@ public class SamplesDBScriptableObject : ScriptableObject {
         public Color IconColor;
         public Texture Image;
         public Color ImageColor;
+
+		public ToolUnlockInfo[] toolUnlockInfo;
+
+		public string GetToolUnlockInfo(int tooldId)
+		{
+			foreach(var item in toolUnlockInfo)
+			{
+				if(item.toolId == tooldId)
+				{
+					return item.info;
+				}
+			}
+			return string.Empty;
+		}
     }
+
+	[System.Serializable]
+	public struct ToolUnlockInfo
+	{
+		[ToolsListAttribute] public int toolId;
+		public string info;
+	}
 
     public Sample[] samples;
 }

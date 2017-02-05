@@ -1,59 +1,70 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ToolsListIconController : MonoBehaviour {
 
-    [SerializeField] UnityEngine.UI.Image icon;
-    [SerializeField] UnityEngine.UI.Image nonCollectedIcon;
-    [SerializeField] UnityEngine.UI.Text displayName;
-    [SerializeField] UnityEngine.UI.Text cost;
+    [SerializeField] Image icon;
+    [SerializeField] Image nonCollectedIcon;
+    [SerializeField] Text displayName;
+    [SerializeField] Text cost;
+	[SerializeField] Toggle toggle;
 
     protected int toolId;
     protected ToolsDBScriptableObject.Tool tool;
     protected bool collectedStatus;
 
-    public void Set(int sampleId)
+	private bool handlerAdded = false;
+
+	public System.Action<int> onSelectCb = delegate {};
+
+    public void Set(int toolId, ToggleGroup toggleGroup)
     {
-        /*this.sampleId = sampleId;
-        sample = GameController.Instance.SamplesDB[sampleId];
-        collectedStatus = GameProgress.Instance.SamplesCollected.Contains(sampleId);
+		this.toolId = toolId;
+		tool = GameController.Instance.ToolsDB[toolId];
+		collectedStatus = PlayerData.Instance.ToolsUnlocked.Contains(toolId);
 
-        UpdateUI();
+		UpdateUI();
 
-        if (!handlerAdded)
-        {
-            GameProgress.Instance.OnSamplesCollectionUpdated += OnSamplesCollectionUpdatedHandler;
-            handlerAdded = true;
-        }*/
+		if(!handlerAdded)
+		{
+			PlayerData.Instance.OnToolsUnlockUpdated += OnToolsCollectionUpdatedHandler;
+			toggle.onValueChanged.AddListener(OnSelect);
+			toggle.group = toggleGroup;
+			handlerAdded = true;
+		}
     }
 
     protected virtual void UpdateUI()
     {
-        /*icon.sprite = sample.Icon;
-        icon.color = sample.IconColor;
-        nonCollectedIcon.sprite = sample.Icon;
-        icon.enabled = collectedStatus;
-        nonCollectedIcon.enabled = !collectedStatus;*/
+		icon.sprite = tool.icon;
+		icon.enabled = collectedStatus;
+		nonCollectedIcon.sprite = tool.icon;
+		nonCollectedIcon.enabled = !collectedStatus;
+		displayName.text = tool.name;
+		cost.text = tool.unlockCost.ToString();
     }
 
-    void OnSamplesCollectionUpdatedHandler()
+    void OnToolsCollectionUpdatedHandler()
     {
-        /*collectedStatus = GameProgress.Instance.SamplesCollected.Contains(sampleId);
-        icon.enabled = collectedStatus;
-        nonCollectedIcon.enabled = !collectedStatus;*/
+		collectedStatus = PlayerData.Instance.ToolsUnlocked.Contains(toolId);
+		icon.enabled = collectedStatus;
+		nonCollectedIcon.enabled = !collectedStatus;
     }
 
-    public virtual void OnSelect()
+	public virtual void OnSelect(bool selectedState)
     {
-        /*GameController.Instance.DisplaySamplesPopUp(this.sampleId);*/
+		onSelectCb(this.toolId);
     }
 
     void OnDestroy()
     {
-        /*if (handlerAdded)
-        {
-            GameProgress.Instance.OnSamplesCollectionUpdated -= OnSamplesCollectionUpdatedHandler;
-        }*/
+		if(handlerAdded && PlayerData.Instance != null)
+		{
+			PlayerData.Instance.OnToolsUnlockUpdated -= OnToolsCollectionUpdatedHandler;
+			toggle.onValueChanged.RemoveListener(OnSelect);
+			handlerAdded = !handlerAdded;
+		}
     }
 }

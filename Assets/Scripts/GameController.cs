@@ -35,6 +35,7 @@ public class GameController : MonoBehaviour {
 
     public static GameController Instance { get; private set; }
     public SamplesDBScriptableObject.Sample[] SamplesDB { get { return this.samplesDB.samples; } }
+	public ToolsDBScriptableObject.Tool[] ToolsDB {get { return this.toolsDB.Tools; }}
 
     void Awake()
     {

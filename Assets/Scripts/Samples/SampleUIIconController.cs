@@ -12,17 +12,17 @@ public class SampleUIIconController : MonoBehaviour {
 
     private bool handlerAdded = false;
 
-    public void Set(int sampleId)
+    public void Set(int id)
     {
-        this.sampleId = sampleId;
-        sample = GameController.Instance.SamplesDB[sampleId];
-		collectedStatus = PlayerData.Instance.SamplesCollected.Contains(sampleId);
+        this.sampleId = id;
+        sample = GameController.Instance.SamplesDB[id];
+		collectedStatus = PlayerData.Instance.SamplesCollected.Contains(id);
 
         UpdateUI();
 
         if (!handlerAdded)
         {
-			PlayerData.Instance.OnSamplesCollectionUpdated += OnSamplesCollectionUpdatedHandler;            
+			PlayerData.Instance.OnSamplesCollectionUpdated += OnSamplesCollectionUpdatedHandler;
             handlerAdded = true;
         }        
     }

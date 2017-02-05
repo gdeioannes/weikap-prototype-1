@@ -1,27 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class SamplesPopUpController : MonoBehaviour {
 
     [SerializeField] SamplesListIconController samplesListIconPrefab;
     [SerializeField] GameObject samplesListContainer;
+	[SerializeField] ToggleGroup samplesToggleGroup;
 
     [SerializeField] ToolsListIconController toolsListIconPrefab;
     [SerializeField] GameObject toolsListContainer;
+	[SerializeField] ToggleGroup toolsToggleGroup;
 
-    [SerializeField] UnityEngine.UI.Text coinsAmount;
-    [SerializeField] UnityEngine.UI.Text selectedSampleName;
-    [SerializeField] UnityEngine.UI.Text selectedSampleDesc;
-    [SerializeField] UnityEngine.UI.RawImage collectedSelectedSampleImage;
-    [SerializeField] UnityEngine.UI.RawImage nonCollectedSelectedSampleImage;
+    [SerializeField] Text coinsAmount;
+    [SerializeField] Text selectedSampleName;
+    [SerializeField] Text selectedSampleDesc;
+	[SerializeField] Text selectedSampleToolInfo;
+    [SerializeField] RawImage collectedSelectedSampleImage;
+    [SerializeField] RawImage nonCollectedSelectedSampleImage;
 
     bool handlersAdded;
 
+	int selectedSampleId = 0, selectedToolId = -1;
+
     public void Show(int sampleId)
     {
-        Time.timeScale = 0;
+		selectedSampleId = sampleId;
+		Time.timeScale = 0;
         Initialize();
-        OnSelect(sampleId);
+		OnSelectSample(selectedSampleId);
         this.gameObject.SetActive(true);
     }
 
@@ -41,6 +48,7 @@ public class SamplesPopUpController : MonoBehaviour {
         }
 
         InitializeSamplesList();
+		InitializeToolsList();
     }
 
     void UpdateCoinsAvailable(long amount)
@@ -59,14 +67,29 @@ public class SamplesPopUpController : MonoBehaviour {
             var newSampleItem = Object.Instantiate<SamplesListIconController>(samplesListIconPrefab);
             newSampleItem.transform.SetParent(this.samplesListContainer.transform, false);
             newSampleItem.Set(i);
-            newSampleItem.onSelectCb = OnSelect;
+			newSampleItem.onSelectCb = OnSelectSample;
         }
     }
 
-    void OnSelect(int sampleId)
+	void InitializeToolsList()
+	{
+		var toolsList = GameController.Instance.ToolsDB;
+		toolsListContainer.transform.DestroyChildren();
+
+		for(int i = 0; i < toolsList.Length; ++i)
+		{
+			var newToolItem = Object.Instantiate<ToolsListIconController>(toolsListIconPrefab);
+			newToolItem.transform.SetParent(this.toolsListContainer.transform, false);
+			newToolItem.Set(i, toolsToggleGroup);
+			newToolItem.onSelectCb = OnSelectTool;
+		}
+	}
+
+    void OnSelectSample(int sampleId)
     {
-        var selectedSample = GameController.Instance.SamplesDB[sampleId];
-		bool collectedStatus = PlayerData.Instance.SamplesCollected.Contains(sampleId);
+		selectedSampleId = sampleId;
+		var selectedSample = GameController.Instance.SamplesDB[selectedSampleId];
+		bool collectedStatus = PlayerData.Instance.SamplesCollected.Contains(selectedSampleId);
         selectedSampleName.text = selectedSample.Name;
         selectedSampleDesc.text = selectedSample.Description;
         collectedSelectedSampleImage.texture = selectedSample.Image;
@@ -74,7 +97,25 @@ public class SamplesPopUpController : MonoBehaviour {
         collectedSelectedSampleImage.color = selectedSample.ImageColor;
         collectedSelectedSampleImage.enabled = collectedStatus;
         nonCollectedSelectedSampleImage.enabled = !collectedStatus;
+		OnSelectTool(selectedToolId);
     }
+
+	void OnSelectTool(int toolId)
+	{
+		selectedToolId = toolId;
+		bool unlockStatus = PlayerData.Instance.ToolsUnlocked.Contains(selectedToolId);
+		// get current tool status
+		if (!unlockStatus)
+		{
+			// try buy current selected tool
+			PlayerData.Instance.BuyTool(selectedToolId);
+			return;
+		}
+
+		// show tool related info
+		var selectedSample = GameController.Instance.SamplesDB[selectedSampleId];
+		selectedSampleToolInfo.text = selectedSample.GetToolUnlockInfo(selectedToolId);
+	}
 
     void OnDestroy()
     {

@@ -18,21 +18,39 @@ MonoBehaviour:
     IconColor: {r: 0.38431376, g: 0.9725491, b: 0.48627454, a: 1}
     Image: {fileID: 2800000, guid: 8411e03afad2846469ff9f9826500446, type: 3}
     ImageColor: {r: 0.38431376, g: 0.9725491, b: 0.48627454, a: 1}
+    toolUnlockInfo:
+    - toolId: 0
+      info: 'Masa: 25gr'
+    - toolId: 1
+      info: 'Temperatura: 40c'
   - Name: Safiro
     Description: Item Description Here!
     Icon: {fileID: 21300000, guid: 28fd0f58702394d47af9ff907cd9bf61, type: 3}
     IconColor: {r: 0.38431376, g: 0.9725491, b: 0.48627454, a: 1}
     Image: {fileID: 2800000, guid: 28fd0f58702394d47af9ff907cd9bf61, type: 3}
     ImageColor: {r: 0.38431376, g: 0.9725491, b: 0.48627454, a: 1}
+    toolUnlockInfo:
+    - toolId: 0
+      info: 'Masa: 10gr'
   - Name: Cadmio
     Description: Item Description Here!
     Icon: {fileID: 21300000, guid: 33ebcf00794cd904c8624995046485d7, type: 3}
     IconColor: {r: 0.38431376, g: 0.9725491, b: 0.48627454, a: 1}
     Image: {fileID: 2800000, guid: 33ebcf00794cd904c8624995046485d7, type: 3}
     ImageColor: {r: 0.38431376, g: 0.9725491, b: 0.48627454, a: 1}
+    toolUnlockInfo:
+    - toolId: 0
+      info: 'Masa: 40gr'
+    - toolId: 2
+      info: "Composici\xF3n: Eh2"
   - Name: Adamantium
     Description: Item Description Here!
     Icon: {fileID: 21300000, guid: aa04ea58a3ca3cd4a93c2f65086dedf6, type: 3}
     IconColor: {r: 0.38431376, g: 0.9725491, b: 0.48627454, a: 1}
     Image: {fileID: 2800000, guid: aa04ea58a3ca3cd4a93c2f65086dedf6, type: 3}
     ImageColor: {r: 0.38431376, g: 0.9725491, b: 0.48627454, a: 1}
+    toolUnlockInfo:
+    - toolId: 0
+      info: 'Masa: 50gr'
+    - toolId: 2
+      info: "Composici\xF3n: H2N"
