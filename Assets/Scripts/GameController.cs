@@ -76,14 +76,10 @@ public class GameController : MonoBehaviour {
             levelProgress.consumables[type] = amount;
         }
 
-        if (type == InGameItemsDBScriptableObject.ItemType.Sample)
-        {
-			PlayerData.Instance.UpdateSamplesCollected(index);
-        }
-        if (type == InGameItemsDBScriptableObject.ItemType.Coin)
-        {
-			PlayerData.Instance.UpdateCoinsCollected((long)amount);
-        }
+		if(type == InGameItemsDBScriptableObject.ItemType.Sample)
+		{
+			levelProgress.samples.Add(index);
+		}
 
         UpdateConsumablesUI(type, levelProgress.consumables[type]);
     }
