@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class BackButtonHandler : MonoBehaviour {
 
 	UnityEngine.SceneManagement.Scene currentScene;
+	[SerializeField] bool onlyWhenTimeScale1 = false;
 
 	void Awake()
 	{
@@ -18,7 +19,10 @@ public class BackButtonHandler : MonoBehaviour {
 	{
 		if(Input.GetKeyDown(KeyCode.Escape) && GetLastOpenScene.buildIndex == currentScene.buildIndex)
 		{
-			onBackButtonAction.Invoke();
+			if (!onlyWhenTimeScale1 || (onlyWhenTimeScale1 && Time.timeScale == 1))
+			{
+				onBackButtonAction.Invoke();
+			}
 		}
 	}
 

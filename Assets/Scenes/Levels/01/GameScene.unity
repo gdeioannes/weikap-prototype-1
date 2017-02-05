@@ -3976,6 +3976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b8227e06dae94da785d80843e1eda12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onlyWhenTimeScale1: 1
   onBackButtonAction:
     m_PersistentCalls:
       m_Calls:
@@ -4156,7 +4157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 47.55, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &313922290
