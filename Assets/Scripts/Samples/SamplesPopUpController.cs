@@ -19,6 +19,8 @@ public class SamplesPopUpController : MonoBehaviour {
     [SerializeField] RawImage collectedSelectedSampleImage;
     [SerializeField] RawImage nonCollectedSelectedSampleImage;
 
+	[SerializeField] ToolsPurchasePopUpController toolsPurchasePopUp;
+
     bool handlersAdded;
 
 	int selectedSampleId = 0, selectedToolId = -1;
@@ -26,6 +28,7 @@ public class SamplesPopUpController : MonoBehaviour {
     public void Show(int sampleId)
     {
 		selectedSampleId = sampleId;
+		selectedToolId = -1;
 		Time.timeScale = 0;
         Initialize();
 		OnSelectSample(selectedSampleId);
@@ -103,12 +106,16 @@ public class SamplesPopUpController : MonoBehaviour {
 	void OnSelectTool(int toolId)
 	{
 		selectedToolId = toolId;
+
+		if(selectedToolId < 0) { selectedSampleToolInfo.text = string.Empty; return; } // invalid tool id
+
 		bool unlockStatus = PlayerData.Instance.ToolsUnlocked.Contains(selectedToolId);
+
 		// get current tool status
 		if (!unlockStatus)
 		{
 			// try buy current selected tool
-			PlayerData.Instance.BuyTool(selectedToolId);
+			toolsPurchasePopUp.Show(toolId);
 			return;
 		}
 
