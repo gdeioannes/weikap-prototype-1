@@ -14,6 +14,8 @@ public class LevelSelectController : MonoBehaviour
 	public void Initialize(int levelId, System.Action<int> onLevelSelectCb)
 	{
 		this.levelId = levelId;
+		var levelDef = PlayerData.Instance.Levels.TryGetValue (this.levelId);
+		this.levelName.text = levelDef.name;
 		this.onLevelSelectCb = onLevelSelectCb;
 		UpdateLevelImage ();
 

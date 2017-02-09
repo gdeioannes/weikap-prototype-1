@@ -8,6 +8,7 @@ public class LevelsDBScriptableObject : ScriptableObject
 	[System.Serializable]
 	public class Level 
 	{		
+		public string name;
 		public int samples;
 		public int questions;
 		public int coins;
