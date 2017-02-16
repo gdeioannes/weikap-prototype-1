@@ -47,8 +47,8 @@ public class GameController : MonoBehaviour {
 
     void Start()
     {
-        coinsMax.text = levelContainer.CoinsCount.ToString();
-        questionsMax.text = levelContainer.QuestionsCount.ToString();
+        coinsMax.text = PlayerData.Instance.Levels[levelProgress.Id].coins.ToString();
+        questionsMax.text = PlayerData.Instance.Levels[levelProgress.Id].questions.ToString();
         samplesUIController.FillSamplesInLevel(levelContainer.samplesInLevel);
         SpawnCharacterOnMap();
     }

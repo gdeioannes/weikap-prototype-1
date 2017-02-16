@@ -50,22 +50,7 @@ public class LevelsDBScriptableObject : ScriptableObject
 				item.samples += consumable.type == InGameItemsDBScriptableObject.ItemType.Sample ? consumable.amount : 0;
 			}
 		}
-	}
-
-	public static List<GameObject> GetAllSceneRoots()
-	{
-		#region taken from http://answers.unity3d.com/questions/27729/finding-the-root-gameobjects-in-the-scene-.html
-		// this method is faster than using Resources.FindObjectsOfTypeAll
-		var prop = new UnityEditor.HierarchyProperty( UnityEditor.HierarchyType.GameObjects );
-		var expanded = new int[0];
-		List<GameObject> sceneRoots = new List<GameObject>();
-		while( prop.Next( expanded ) )
-		{
-			sceneRoots.Add(prop.pptrValue as GameObject);
-		}
-		#endregion
-		return sceneRoots;
-	}
+	}	
 
 	#endif
 }

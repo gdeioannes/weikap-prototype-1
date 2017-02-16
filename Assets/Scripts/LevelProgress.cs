@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class LevelProgress : MonoBehaviour {    
 
@@ -14,6 +15,9 @@ public class LevelProgress : MonoBehaviour {
         consumables = new Dictionary<InGameItemsDBScriptableObject.ItemType, int>();
 		samples = new HashSet<int>();
 		this.Status = PlayerData.LevelStatus.OnGoing;
+        // get current level id
+        var currentLevelInfo = PlayerData.Instance.Levels.Where(w => w.Value.scene.name == UnityEngine.SceneManagement.SceneManager.GetSceneAt(0).name).FirstOrDefault();
+        this.Id = currentLevelInfo.Key;
     }
 
 	public void UpdateGameProgress(PlayerData.LevelStatus status)
