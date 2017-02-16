@@ -50,8 +50,8 @@ public class SamplesPopUpController : MonoBehaviour {
             handlersAdded = true;
         }
 
+        InitializeToolsList();
         InitializeSamplesList();
-		InitializeToolsList();
     }
 
     void UpdateCoinsAvailable(long amount)
@@ -69,8 +69,14 @@ public class SamplesPopUpController : MonoBehaviour {
         {
             var newSampleItem = Object.Instantiate<SamplesListIconController>(samplesListIconPrefab);
             newSampleItem.transform.SetParent(this.samplesListContainer.transform, false);
-            newSampleItem.Set(i);
-			newSampleItem.onSelectCb = OnSelectSample;
+
+            if (i == selectedSampleId)
+            {
+                newSampleItem.GetComponent<Toggle>().isOn = true;
+            }
+
+            newSampleItem.Set(i, samplesToggleGroup);
+            newSampleItem.onSelectCb = OnSelectSample;
         }
     }
 
@@ -105,9 +111,9 @@ public class SamplesPopUpController : MonoBehaviour {
 
 	void OnSelectTool(int toolId)
 	{
-		selectedToolId = toolId;
+        selectedToolId = toolId;
 
-		if(selectedToolId < 0) { selectedSampleToolInfo.text = string.Empty; return; } // invalid tool id
+        if (selectedToolId < 0) { selectedSampleToolInfo.text = string.Empty; return; } // invalid tool id
 
 		bool unlockStatus = PlayerData.Instance.ToolsUnlocked.Contains(selectedToolId);
 
@@ -115,25 +121,29 @@ public class SamplesPopUpController : MonoBehaviour {
 		if (!unlockStatus)
 		{
 			// try buy current selected tool
-			toolsPurchasePopUp.Show(toolId);
-			return;
+			toolsPurchasePopUp.Show(selectedToolId);
+            selectedSampleToolInfo.text = string.Empty;
+            return;
 		}
-
-		// show tool related info
-		var selectedSample = GameController.Instance.SamplesDB[selectedSampleId];
-		selectedSampleToolInfo.text = selectedSample.GetToolUnlockInfo(selectedToolId);
-	}
+        
+        ShowSelectedToolInfo(); // show tool related info
+    }
 
     void ShowSelectedToolInfo()
     {
         if (selectedToolId < 0) { selectedSampleToolInfo.text = string.Empty; return; } // invalid tool id
         bool unlockStatus = PlayerData.Instance.ToolsUnlocked.Contains(selectedToolId);
+        bool sampleUnlocked = PlayerData.Instance.SamplesCollected.Contains(selectedSampleId);
 
-        if (unlockStatus)
+        if (unlockStatus && sampleUnlocked)
         {
             // show tool related info
             var selectedSample = GameController.Instance.SamplesDB[selectedSampleId];
             selectedSampleToolInfo.text = selectedSample.GetToolUnlockInfo(selectedToolId);
+        }
+        else
+        {
+            selectedSampleToolInfo.text = string.Empty;
         }
     }    
 

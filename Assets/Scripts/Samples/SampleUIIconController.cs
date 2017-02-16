@@ -10,7 +10,7 @@ public class SampleUIIconController : MonoBehaviour {
     protected SamplesDBScriptableObject.Sample sample;
     protected bool collectedStatus;
 
-    private bool handlerAdded = false;
+    protected bool handlerAdded { get; private set; }
 
     public void Set(int id)
     {

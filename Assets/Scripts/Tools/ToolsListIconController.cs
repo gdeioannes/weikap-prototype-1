@@ -55,7 +55,10 @@ public class ToolsListIconController : MonoBehaviour {
 
 	public virtual void OnSelect(bool selectedState)
     {
-		onSelectCb(this.toolId);
+        if (selectedState)
+        {
+            onSelectCb(this.toolId);
+        }        
     }
 
     void OnDestroy()
