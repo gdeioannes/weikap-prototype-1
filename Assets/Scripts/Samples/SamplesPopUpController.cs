@@ -100,7 +100,7 @@ public class SamplesPopUpController : MonoBehaviour {
         collectedSelectedSampleImage.color = selectedSample.ImageColor;
         collectedSelectedSampleImage.enabled = collectedStatus;
         nonCollectedSelectedSampleImage.enabled = !collectedStatus;
-		OnSelectTool(selectedToolId);
+        ShowSelectedToolInfo();
     }
 
 	void OnSelectTool(int toolId)
@@ -123,6 +123,19 @@ public class SamplesPopUpController : MonoBehaviour {
 		var selectedSample = GameController.Instance.SamplesDB[selectedSampleId];
 		selectedSampleToolInfo.text = selectedSample.GetToolUnlockInfo(selectedToolId);
 	}
+
+    void ShowSelectedToolInfo()
+    {
+        if (selectedToolId < 0) { selectedSampleToolInfo.text = string.Empty; return; } // invalid tool id
+        bool unlockStatus = PlayerData.Instance.ToolsUnlocked.Contains(selectedToolId);
+
+        if (unlockStatus)
+        {
+            // show tool related info
+            var selectedSample = GameController.Instance.SamplesDB[selectedSampleId];
+            selectedSampleToolInfo.text = selectedSample.GetToolUnlockInfo(selectedToolId);
+        }
+    }    
 
     void OnDestroy()
     {
