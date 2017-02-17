@@ -20,13 +20,17 @@ public class GameController : MonoBehaviour {
     [SerializeField] UnityEngine.UI.Text coinsMax;    
     [SerializeField] UnityEngine.UI.Text questionsCurrent;
     [SerializeField] UnityEngine.UI.Text questionsMax;
-    [SerializeField] SamplesInLevelController samplesUIController;
+    [SerializeField] UnityEngine.UI.Text samplesCurrent;
+    [SerializeField] UnityEngine.UI.Text samplesMax;
+    
     [SerializeField] SamplesPopUpController samplesPopUpController;
     [SerializeField] QuestionsPopUpController questionController;
-	[SerializeField] [SceneListAttribute] string stageEndedScene;
+    [SerializeField] [SceneList] string samplesPopUpScene;
+	[SerializeField] [SceneList] string stageEndedScene;
 
     public Transform CoinsIconContainer;
     public Transform QuestionsIconContainer;
+    public Transform SamplesIconContainer;
     public Camera WorldCamera;
     public RectTransform UIMainRectTransform;
 
@@ -51,7 +55,7 @@ public class GameController : MonoBehaviour {
     {
         coinsMax.text = PlayerData.Instance.Levels[levelProgress.Id].coins.ToString();
         questionsMax.text = PlayerData.Instance.Levels[levelProgress.Id].questions.ToString();
-        samplesUIController.FillSamplesInLevel(levelContainer.samplesInLevel);
+        samplesMax.text = PlayerData.Instance.Levels[levelProgress.Id].samples.ToString();        
         SpawnCharacterOnMap();
     }
 
@@ -98,6 +102,9 @@ public class GameController : MonoBehaviour {
             case InGameItemsDBScriptableObject.ItemType.Question:
                 questionsCurrent.text = amount.ToString();
                 break;
+            case InGameItemsDBScriptableObject.ItemType.Sample:
+                samplesCurrent.text = amount.ToString();
+                break;
         }
     }
 
@@ -116,14 +123,35 @@ public class GameController : MonoBehaviour {
         questionController.ShowQuestion(questionId, onAnswerCb);
     }
 
+    bool loadingSamplesPopUp;
     public void DisplaySamplesPopUp(int sampleId)
     {
-        samplesPopUpController.Show(sampleId);
-    }    
+        if ( samplesPopUpController != null) { samplesPopUpController.Show(sampleId); }
+        else if (!loadingSamplesPopUp)
+        {
+            StartCoroutine(DisplaySamplesPopUpCoroutine(sampleId));
+            loadingSamplesPopUp = true;
+        }
+    }
 
-    public Transform GetSampleIconContainer(int sampleId)
+    IEnumerator DisplaySamplesPopUpCoroutine(int sampleId)
     {
-        return samplesUIController.GetSampleIconTransform(sampleId);
+        var op = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(samplesPopUpScene, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        yield return op;
+        // get last open scene
+        var sceneToCheck = UnityEngine.SceneManagement.SceneManager.GetSceneByName(samplesPopUpScene);
+        var gameRoots = sceneToCheck.GetRootGameObjects();        
+        foreach (var item in gameRoots)
+        {
+            samplesPopUpController = item.GetComponentInChildren<SamplesPopUpController>();
+            if (samplesPopUpController != null) {  break; }
+        }
+
+        if (samplesPopUpController != null)
+        {
+            samplesPopUpController.Show(sampleId);
+        }
+        loadingSamplesPopUp = false;
     }
 
     public void UpdateLevelProgress(PlayerData.LevelStatus status)

@@ -30,7 +30,7 @@ public class ConsumableController : BaseInteractiveElement
                 endPosition = GameController.Instance.CoinsIconContainer.position;
                 break;
             case InGameItemsDBScriptableObject.ItemType.Sample:
-                endPosition = GameController.Instance.GetSampleIconContainer(id).position;
+                endPosition = GameController.Instance.SamplesIconContainer.position;                
                 break;
 			case InGameItemsDBScriptableObject.ItemType.Question:
 				endPosition = GameController.Instance.QuestionsIconContainer.position;
