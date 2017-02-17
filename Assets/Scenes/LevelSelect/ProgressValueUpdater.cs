@@ -33,10 +33,10 @@ public class ProgressValueUpdater : MonoBehaviour {
 				textToReplace.text = PlayerData.Instance.CoinsAvailable.ToString();
 				break;
 			case Type.SamplesCurrent:
-				textToReplace.text = PlayerData.Instance.SamplesCollected.Count.ToString();
+				textToReplace.text = PlayerData.Instance.LevelsData.Values.Sum(s=>s.maxSamplesCollected).ToString();
 				break;
 			case Type.QuestionsCurrent:
-				PlayerData.Instance.LevelsData.Values.Sum(w => w.maxRightAnsweredQuestions).ToString();
+                textToReplace.text = PlayerData.Instance.LevelsData.Values.Sum(w => w.maxRightAnsweredQuestions).ToString();
 				break;
 			case Type.ToolsCurrent:
 				textToReplace.text = PlayerData.Instance.ToolsUnlocked.Count.ToString();

@@ -25,4 +25,22 @@ public class LevelProgress : MonoBehaviour {
         this.Status = status;
 		PlayerData.Instance.UpdateLevelProgress(Id, consumables, this.Status);
     }
+
+    public void SaveCollectedItemsInLevel()
+    {
+        foreach (var item in consumables)
+        {
+            if (item.Key == InGameItemsDBScriptableObject.ItemType.Coin)
+            {
+                PlayerData.Instance.UpdateCoinsCollected((long)item.Value);
+            }
+        }
+
+        foreach (var sampleId in samples)
+        {
+            PlayerData.Instance.UpdateSamplesCollected(sampleId);
+        }
+
+        PlayerData.Instance.UpdateMaxValues(Id, consumables);        
+    }
 }

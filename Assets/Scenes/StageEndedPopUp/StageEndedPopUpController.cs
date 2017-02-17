@@ -30,19 +30,8 @@ public class StageEndedPopUpController : MonoBehaviour {
 
 	public void SaveCollectedItemsInLevel()
 	{
-		foreach(var item in GameController.Instance.levelProgress.consumables)
-		{
-			if (item.Key == InGameItemsDBScriptableObject.ItemType.Coin)
-			{
-				PlayerData.Instance.UpdateCoinsCollected((long)item.Value);
-			}
-		}
-
-		foreach(var sampleId in GameController.Instance.levelProgress.samples)
-		{
-			PlayerData.Instance.UpdateSamplesCollected(sampleId);
-		}
-	}
+        GameController.Instance.levelProgress.SaveCollectedItemsInLevel();
+    }
 
 	public void RestartCurrentLevel()
 	{

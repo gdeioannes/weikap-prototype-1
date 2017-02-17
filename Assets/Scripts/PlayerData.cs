@@ -66,6 +66,8 @@ public class PlayerData : Singleton<PlayerData>
 			Levels [i] = levelsDB.levels [i];
 		}
 
+        DontDestroyOnLoad(this.gameObject);
+
 		StartCoroutine (UpdateGameTime ());
 	}
 
@@ -148,6 +150,7 @@ public class PlayerData : Singleton<PlayerData>
             while (levelsEnumerator.MoveNext())
             {
                 gameData.levelsData[index] = levelsEnumerator.Current.Value;
+                ++index;
             }
         }
 
@@ -161,6 +164,9 @@ public class PlayerData : Singleton<PlayerData>
     public static void RemoveValuesFromPlayerPrefs()
     {
         PlayerPrefs.DeleteKey(playerProgressKey);
+        Instance.GetValuesFromPlayerPrefs();
+        // Reload current scene
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         Debug.Log("Datos borrados correctamente");
     }
 
@@ -198,15 +204,19 @@ public class PlayerData : Singleton<PlayerData>
         if (!LevelsData.ContainsKey(levelId))
         {
             LevelsData[levelId] = new LevelData() { levelId = levelId };            
-        }
-        LevelsData[levelId].maxCoinsCollected = Mathf.Max(LevelsData[levelId].maxCoinsCollected, consumablesCollected.TryGetValue(InGameItemsDBScriptableObject.ItemType.Coin,0));
-        LevelsData[levelId].maxSamplesCollected = Mathf.Max(LevelsData[levelId].maxSamplesCollected, consumablesCollected.TryGetValue(InGameItemsDBScriptableObject.ItemType.Sample, 0));
-        LevelsData[levelId].maxRightAnsweredQuestions = Mathf.Max(LevelsData[levelId].maxRightAnsweredQuestions, consumablesCollected.TryGetValue(InGameItemsDBScriptableObject.ItemType.Question, 0));
+        }        
 
         if (LevelsData[levelId].status == LevelStatus.OnGoing || (LevelsData[levelId].status == LevelStatus.Lose && status == LevelStatus.Win))
         {
             LevelsData[levelId].status = status;
-        }
+        }        
+    }
+
+    public void UpdateMaxValues(int levelId, Dictionary<InGameItemsDBScriptableObject.ItemType,int> consumablesCollected)
+    {
+        LevelsData[levelId].maxCoinsCollected = Mathf.Max(LevelsData[levelId].maxCoinsCollected, consumablesCollected.TryGetValue(InGameItemsDBScriptableObject.ItemType.Coin, 0));
+        LevelsData[levelId].maxSamplesCollected = Mathf.Max(LevelsData[levelId].maxSamplesCollected, consumablesCollected.TryGetValue(InGameItemsDBScriptableObject.ItemType.Sample, 0));
+        LevelsData[levelId].maxRightAnsweredQuestions = Mathf.Max(LevelsData[levelId].maxRightAnsweredQuestions, consumablesCollected.TryGetValue(InGameItemsDBScriptableObject.ItemType.Question, 0));
     }
 
     void OnDestroy()

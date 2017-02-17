@@ -37,6 +37,8 @@ public class GameController : MonoBehaviour {
     public SamplesDBScriptableObject.Sample[] SamplesDB { get { return this.samplesDB.samples; } }
 	public ToolsDBScriptableObject.Tool[] ToolsDB {get { return this.toolsDB.Tools; }}
 
+    public System.Action OnConsumablesUpdated = delegate {};
+
     void Awake()
     {
         Instance = this;
@@ -82,6 +84,8 @@ public class GameController : MonoBehaviour {
 		}
 
         UpdateConsumablesUI(type, levelProgress.consumables[type]);
+
+        OnConsumablesUpdated();
     }
 
     void UpdateConsumablesUI(InGameItemsDBScriptableObject.ItemType type, int amount)
