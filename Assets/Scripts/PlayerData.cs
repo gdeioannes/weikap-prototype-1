@@ -6,6 +6,8 @@ using System.Linq;
 [Prefab()]
 public class PlayerData : Singleton<PlayerData>
 {
+    const string playerProgressKey = "gamerProgress";
+
     public enum LevelStatus
     {
         OnGoing,
@@ -80,7 +82,7 @@ public class PlayerData : Singleton<PlayerData>
 
     void GetValuesFromPlayerPrefs()
     {
-        string jsonGameData = PlayerPrefs.GetString("gamerProgress");
+        string jsonGameData = PlayerPrefs.GetString(playerProgressKey,string.Empty);
         gameData = !string.IsNullOrEmpty(jsonGameData) ? JsonUtility.FromJson<GameData>(jsonGameData) : new GameData();
 
         SamplesCollected = new HashSet<int>();
@@ -150,7 +152,16 @@ public class PlayerData : Singleton<PlayerData>
         }
 
         string jsonGameData = JsonUtility.ToJson(gameData);
-        PlayerPrefs.SetString("gamerProgress", jsonGameData);
+        PlayerPrefs.SetString(playerProgressKey, jsonGameData);
+    }
+
+#if UNITY_EDITOR
+    [UnityEditor.MenuItem("Tools/Weikap/Borrar Datos")]
+#endif
+    public static void RemoveValuesFromPlayerPrefs()
+    {
+        PlayerPrefs.DeleteKey(playerProgressKey);
+        Debug.Log("Datos borrados correctamente");
     }
 
     public void UpdateSamplesCollected(int newSampleId)

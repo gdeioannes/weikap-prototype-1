@@ -10,8 +10,8 @@ public class OptionsPopUpController : MonoBehaviour
 	[SerializeField] Toggle vfxToggle;
 	[SerializeField] Toggle musicToggle;
 
-	[SerializeField] GameObject creditsButtonContainer;
-	[SerializeField] GameObject backToMenuButtonContainer;
+    [SerializeField] GameObject[] objectsToShowInGameMode;
+    [SerializeField] GameObject[] objectsToShowInMenuMode;    
 
 	bool _vfxEnabled;
 	bool _musicEnabled;
@@ -54,8 +54,16 @@ public class OptionsPopUpController : MonoBehaviour
 		musicToggle.onValueChanged.AddListener(UpdateToggle);
 
 		bool openedFromLevelSelect = OpenedFromLevelSelect();
-		creditsButtonContainer.SetActive(openedFromLevelSelect);
-		backToMenuButtonContainer.SetActive(!openedFromLevelSelect);
+
+        foreach (var item in objectsToShowInGameMode)
+        {
+            item.SetActive(!openedFromLevelSelect);
+        }
+
+        foreach (var item in objectsToShowInMenuMode)
+        {
+            item.SetActive(openedFromLevelSelect);
+        }
 	}
 
 	void Start()
@@ -80,6 +88,11 @@ public class OptionsPopUpController : MonoBehaviour
 		VfxEnabled = vfxToggle.isOn;
 		MusicEnabled = musicToggle.isOn;
 	}
+    
+    public void ClearPlayerData()
+    {
+        PlayerData.RemoveValuesFromPlayerPrefs();
+    }
 
 	void OnDestroy()
 	{
