@@ -13,8 +13,9 @@ public class ToolsPurchasePopUpController : MonoBehaviour {
 
 	string unableToPurchaseSampleText, purchaseMsgText;
 	int toolId;
+    ToolsDBScriptableObject.Tool toolData;
 
-	void Awake()
+    void Awake()
 	{
 		unableToPurchaseSampleText = unableToPurchaseLabel.text;
 		purchaseMsgText = purchaseLabel.text;
@@ -24,7 +25,8 @@ public class ToolsPurchasePopUpController : MonoBehaviour {
 	{
 		this.gameObject.SetActive(true);
 
-		this.toolId = id;		
+        this.toolId = id;
+        this.toolData = toolData;
 		bool isAbleToPurchase = PlayerData.Instance.CoinsAvailable >= toolData.unlockCost;
 		purchaseAvailableContainer.SetActive(isAbleToPurchase);
 		purchaseNotAvailableContainer.SetActive(!isAbleToPurchase);
@@ -41,6 +43,6 @@ public class ToolsPurchasePopUpController : MonoBehaviour {
 
 	public void DoPurchase()
 	{
-		PlayerData.Instance.BuyTool(this.toolId);
+		PlayerData.Instance.BuyTool(this.toolId, toolData);
 	}
 }

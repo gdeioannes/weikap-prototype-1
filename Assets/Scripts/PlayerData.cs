@@ -174,11 +174,9 @@ public class PlayerData : Singleton<PlayerData>
         OnSamplesCollectionUpdated();
     }
 
-	public bool BuyTool(int toolId)
+	public bool BuyTool(int toolId, ToolsDBScriptableObject.Tool toolData)
 	{
-		if (ToolsUnlocked.Contains(toolId)) { return false; } // do nothing, already purchased
-		if (toolId < 0 || toolId >= GameController.Instance.ToolsDB.Length){ return false; } // invalid tool id
-		var toolData = GameController.Instance.ToolsDB[toolId];
+		if (ToolsUnlocked.Contains(toolId)) { return false; } // do nothing, already purchased			
 		if(gameData.coinsAvailable < toolData.unlockCost)
 		{
 			return false; // unable to buy, not enough coins
