@@ -9,6 +9,7 @@ public class OptionsPopUpController : MonoBehaviour
 
 	[SerializeField] Toggle vfxToggle;
 	[SerializeField] Toggle musicToggle;
+    [SerializeField] SamplesPopUpManager samplesPopUpManager;
 
     [SerializeField] GameObject[] objectsToShowInGameMode;
     [SerializeField] GameObject[] objectsToShowInMenuMode;    
@@ -87,11 +88,12 @@ public class OptionsPopUpController : MonoBehaviour
 	{
 		VfxEnabled = vfxToggle.isOn;
 		MusicEnabled = musicToggle.isOn;
-	}
-    
+	}    
+
     public void ClearPlayerData()
     {
         PlayerData.RemoveValuesFromPlayerPrefs();
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetSceneAt(0).buildIndex);
     }
 
 	void OnDestroy()

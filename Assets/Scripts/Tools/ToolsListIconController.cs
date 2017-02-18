@@ -10,6 +10,7 @@ public class ToolsListIconController : MonoBehaviour {
     [SerializeField] Text displayName;
     [SerializeField] Text cost;
 	[SerializeField] Toggle toggle;
+    [SerializeField] ToolsDBScriptableObject toolsDb;
 
     protected int toolId;
     protected ToolsDBScriptableObject.Tool tool;
@@ -22,7 +23,7 @@ public class ToolsListIconController : MonoBehaviour {
     public void Set(int toolId, ToggleGroup toggleGroup)
     {
 		this.toolId = toolId;
-		tool = GameController.Instance.ToolsDB[toolId];
+		tool = toolsDb.Tools[toolId];
 		collectedStatus = PlayerData.Instance.ToolsUnlocked.Contains(toolId);
 
 		UpdateUI();

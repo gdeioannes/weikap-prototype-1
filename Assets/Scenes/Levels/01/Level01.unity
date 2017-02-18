@@ -9563,6 +9563,7 @@ GameObject:
   - component: {fileID: 1178199066}
   - component: {fileID: 1178199065}
   - component: {fileID: 1178199067}
+  - component: {fileID: 1178199068}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -9597,9 +9598,8 @@ MonoBehaviour:
   questionsMax: {fileID: 1219510462}
   samplesCurrent: {fileID: 1841166301}
   samplesMax: {fileID: 569451450}
-  samplesPopUpController: {fileID: 0}
+  samplesPopUpManager: {fileID: 1178199068}
   questionController: {fileID: 1448136373}
-  samplesPopUpScene: SamplesPopUpScene
   stageEndedScene: StageEndedPopUpScene
   CoinsIconContainer: {fileID: 1767181157}
   QuestionsIconContainer: {fileID: 977737930}
@@ -9634,6 +9634,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30cbe8bebba15ab49958379dc3426ac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1178199068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1178199064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 795ae09accbde3841957c26e17462910, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneName: SamplesPopUpScene
+  updateTimeScale: 1
 --- !u!114 &1219510462 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114371404611522042, guid: 41889fa474f38724499403c26a7d2530,
@@ -13555,6 +13568,11 @@ Prefab:
         type: 2}
       propertyPath: m_AnchorMax.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224173583523855822, guid: 41889fa474f38724499403c26a7d2530,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -9.999939
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 41889fa474f38724499403c26a7d2530, type: 2}

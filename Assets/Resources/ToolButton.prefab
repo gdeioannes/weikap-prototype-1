@@ -159,6 +159,7 @@ MonoBehaviour:
   displayName: {fileID: 114567722152217926}
   cost: {fileID: 114835975425083564}
   toggle: {fileID: 114780845500228138}
+  toolsDb: {fileID: 11400000, guid: 8f31d361d764042f79afca155c41d146, type: 2}
 --- !u!114 &114567722152217926
 MonoBehaviour:
   m_ObjectHideFlags: 1

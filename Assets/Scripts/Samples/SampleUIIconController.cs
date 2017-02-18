@@ -4,7 +4,7 @@ using System.Collections;
 public class SampleUIIconController : MonoBehaviour {
 
     [SerializeField] UnityEngine.UI.Image icon;
-    [SerializeField] UnityEngine.UI.Image nonCollectedIcon;
+    [SerializeField] UnityEngine.UI.Image nonCollectedIcon;    
 
     protected int sampleId;
     protected SamplesDBScriptableObject.Sample sample;
@@ -12,10 +12,10 @@ public class SampleUIIconController : MonoBehaviour {
 
     protected bool handlerAdded { get; private set; }
 
-    public void Set(int id)
+    public void Set(int id, SamplesDBScriptableObject.Sample sampleData)
     {
         this.sampleId = id;
-        sample = GameController.Instance.SamplesDB[id];
+        this.sample = sampleData;
 		collectedStatus = PlayerData.Instance.SamplesCollected.Contains(id);
 
         UpdateUI();

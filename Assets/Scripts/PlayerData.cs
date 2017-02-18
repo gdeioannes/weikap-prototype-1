@@ -164,9 +164,7 @@ public class PlayerData : Singleton<PlayerData>
     public static void RemoveValuesFromPlayerPrefs()
     {
         PlayerPrefs.DeleteKey(playerProgressKey);
-        Instance.GetValuesFromPlayerPrefs();
-        // Reload current scene
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        Instance.GetValuesFromPlayerPrefs();               
         Debug.Log("Datos borrados correctamente");
     }
 

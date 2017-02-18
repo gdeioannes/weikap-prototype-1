@@ -23,9 +23,8 @@ public class GameController : MonoBehaviour {
     [SerializeField] UnityEngine.UI.Text samplesCurrent;
     [SerializeField] UnityEngine.UI.Text samplesMax;
     
-    [SerializeField] SamplesPopUpController samplesPopUpController;
-    [SerializeField] QuestionsPopUpController questionController;
-    [SerializeField] [SceneList] string samplesPopUpScene;
+    [SerializeField] SamplesPopUpManager samplesPopUpManager;
+    [SerializeField] QuestionsPopUpController questionController;    
 	[SerializeField] [SceneList] string stageEndedScene;
 
     public Transform CoinsIconContainer;
@@ -126,32 +125,7 @@ public class GameController : MonoBehaviour {
     bool loadingSamplesPopUp;
     public void DisplaySamplesPopUp(int sampleId)
     {
-        if ( samplesPopUpController != null) { samplesPopUpController.Show(sampleId); }
-        else if (!loadingSamplesPopUp)
-        {
-            StartCoroutine(DisplaySamplesPopUpCoroutine(sampleId));
-            loadingSamplesPopUp = true;
-        }
-    }
-
-    IEnumerator DisplaySamplesPopUpCoroutine(int sampleId)
-    {
-        var op = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(samplesPopUpScene, UnityEngine.SceneManagement.LoadSceneMode.Additive);
-        yield return op;
-        // get last open scene
-        var sceneToCheck = UnityEngine.SceneManagement.SceneManager.GetSceneByName(samplesPopUpScene);
-        var gameRoots = sceneToCheck.GetRootGameObjects();        
-        foreach (var item in gameRoots)
-        {
-            samplesPopUpController = item.GetComponentInChildren<SamplesPopUpController>();
-            if (samplesPopUpController != null) {  break; }
-        }
-
-        if (samplesPopUpController != null)
-        {
-            samplesPopUpController.Show(sampleId);
-        }
-        loadingSamplesPopUp = false;
+        samplesPopUpManager.DisplaySamplesPopUp(sampleId);
     }
 
     public void UpdateLevelProgress(PlayerData.LevelStatus status)

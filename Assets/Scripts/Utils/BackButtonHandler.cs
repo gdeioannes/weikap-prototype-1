@@ -5,12 +5,12 @@ using UnityEngine.Events;
 
 public class BackButtonHandler : MonoBehaviour {
 
-	UnityEngine.SceneManagement.Scene currentScene;
+	UnityEngine.SceneManagement.Scene currentScene;    
 	[SerializeField] bool onlyWhenTimeScale1 = false;
 
 	void Awake()
 	{
-		currentScene = GetLastOpenScene;
+		currentScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(UnityEngine.SceneManagement.SceneManager.sceneCount-1);
 	}
 
 	[SerializeField] UnityEvent onBackButtonAction = new UnityEvent();
@@ -30,7 +30,7 @@ public class BackButtonHandler : MonoBehaviour {
 	{
 		get
 		{
-			return UnityEngine.SceneManagement.SceneManager.GetSceneAt(UnityEngine.SceneManagement.SceneManager.sceneCount - 1);
+            return UnityEngine.SceneManagement.SceneManager.GetSceneAt(UnityEngine.SceneManagement.SceneManager.sceneCount - 1);            
 		}
 	}
 }

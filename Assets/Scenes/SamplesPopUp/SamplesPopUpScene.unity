@@ -2000,6 +2000,8 @@ MonoBehaviour:
   collectedSelectedSampleImage: {fileID: 588049881}
   nonCollectedSelectedSampleImage: {fileID: 2132951723}
   toolsPurchasePopUp: {fileID: 14426526}
+  samplesDb: {fileID: 11400000, guid: f3a32e5ed26deac4d8e2962e0fe26f90, type: 2}
+  toolsDb: {fileID: 11400000, guid: 8f31d361d764042f79afca155c41d146, type: 2}
 --- !u!1 &1423008793
 GameObject:
   m_ObjectHideFlags: 0

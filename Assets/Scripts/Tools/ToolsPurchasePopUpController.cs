@@ -20,12 +20,11 @@ public class ToolsPurchasePopUpController : MonoBehaviour {
 		purchaseMsgText = purchaseLabel.text;
 	}
 
-	public void Show(int toolId)
+	public void Show(int id, ToolsDBScriptableObject.Tool toolData)
 	{
 		this.gameObject.SetActive(true);
 
-		this.toolId = toolId;
-		var toolData = GameController.Instance.ToolsDB[this.toolId];
+		this.toolId = id;		
 		bool isAbleToPurchase = PlayerData.Instance.CoinsAvailable >= toolData.unlockCost;
 		purchaseAvailableContainer.SetActive(isAbleToPurchase);
 		purchaseNotAvailableContainer.SetActive(!isAbleToPurchase);

@@ -15,14 +15,14 @@ public class SamplesListIconController : SampleUIIconController
         this.displayName.text = sample.Name;        
     }
 
-    public void Set(int sampleId, ToggleGroup toggleGroup)
+    public void Set(int sampleId, SamplesDBScriptableObject.Sample sampleData, ToggleGroup toggleGroup)
     {
         if (!handlerAdded)
         {
             toggle.onValueChanged.AddListener(OnSelect);
             toggle.group = toggleGroup;
         }
-        base.Set(sampleId);
+        base.Set(sampleId, sampleData);
     }
 
     public override void OnSelect()

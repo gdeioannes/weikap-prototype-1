@@ -21,15 +21,28 @@ public class SamplesPopUpController : MonoBehaviour {
 
 	[SerializeField] ToolsPurchasePopUpController toolsPurchasePopUp;
 
+    [SerializeField] SamplesDBScriptableObject samplesDb;
+    [SerializeField] ToolsDBScriptableObject toolsDb;
+
     bool handlersAdded;
 
 	int selectedSampleId = 0, selectedToolId = -1;
+    bool updateTimeScale;
+    UnityEngine.SceneManagement.Scene currentScene;
 
-    public void Show(int sampleId)
+    void Awake()
+    {
+        currentScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(UnityEngine.SceneManagement.SceneManager.sceneCount - 1);        
+    }
+
+    public void Show(int sampleId, bool updateTimeScale)
     {
 		selectedSampleId = sampleId;
 		selectedToolId = -1;
-		Time.timeScale = 0;
+        this.updateTimeScale = updateTimeScale;
+
+        if (updateTimeScale) { Time.timeScale = 0; }
+		
         Initialize();
 		OnSelectSample(selectedSampleId);
         this.gameObject.SetActive(true);
@@ -37,8 +50,11 @@ public class SamplesPopUpController : MonoBehaviour {
 
     public void Hide()
     {
-        this.gameObject.SetActive(false);
-        Time.timeScale = 1;
+        if (updateTimeScale)
+        {
+            Time.timeScale = 1;
+        }
+        UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(currentScene);
     }
 
     void Initialize()
@@ -61,7 +77,7 @@ public class SamplesPopUpController : MonoBehaviour {
 
     void InitializeSamplesList()
     {
-        var samplesList = GameController.Instance.SamplesDB;
+        var samplesList = samplesDb.samples;
 
         samplesListContainer.transform.DestroyChildren();
 
@@ -75,14 +91,14 @@ public class SamplesPopUpController : MonoBehaviour {
                 newSampleItem.GetComponent<Toggle>().isOn = true;
             }
 
-            newSampleItem.Set(i, samplesToggleGroup);
+            newSampleItem.Set(i, samplesDb.samples[i], samplesToggleGroup);
             newSampleItem.onSelectCb = OnSelectSample;
         }
     }
 
 	void InitializeToolsList()
 	{
-		var toolsList = GameController.Instance.ToolsDB;
+		var toolsList = toolsDb.Tools;
 		toolsListContainer.transform.DestroyChildren();
 
 		for(int i = 0; i < toolsList.Length; ++i)
@@ -97,7 +113,7 @@ public class SamplesPopUpController : MonoBehaviour {
     void OnSelectSample(int sampleId)
     {
 		selectedSampleId = sampleId;
-		var selectedSample = GameController.Instance.SamplesDB[selectedSampleId];
+		var selectedSample = samplesDb.samples[selectedSampleId];
 		bool collectedStatus = PlayerData.Instance.SamplesCollected.Contains(selectedSampleId);
         selectedSampleName.text = selectedSample.Name;
         selectedSampleDesc.text = selectedSample.Description;
@@ -121,7 +137,7 @@ public class SamplesPopUpController : MonoBehaviour {
 		if (!unlockStatus)
 		{
 			// try buy current selected tool
-			toolsPurchasePopUp.Show(selectedToolId);
+			toolsPurchasePopUp.Show(selectedToolId, toolsDb.Tools[selectedToolId]);
             selectedSampleToolInfo.text = string.Empty;
             return;
 		}
@@ -138,7 +154,7 @@ public class SamplesPopUpController : MonoBehaviour {
         if (unlockStatus && sampleUnlocked)
         {
             // show tool related info
-            var selectedSample = GameController.Instance.SamplesDB[selectedSampleId];
+            var selectedSample = samplesDb.samples[selectedSampleId];
             selectedSampleToolInfo.text = selectedSample.GetToolUnlockInfo(selectedToolId);
         }
         else

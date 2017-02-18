@@ -244,6 +244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 114000011272517936}
   nonCollectedIcon: {fileID: 114000011382358586}
+  samplesDb: {fileID: 11400000, guid: f3a32e5ed26deac4d8e2962e0fe26f90, type: 2}
   displayName: {fileID: 114000010567887600}
   toggle: {fileID: 114110135893607130}
 --- !u!114 &114110135893607130
